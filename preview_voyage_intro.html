@@ -1005,7 +1005,7 @@ body {
 <!-- VOYAGE BGM STYLE START -->
 <style id="voyage-bgm-style">
 .voyage-bgm {
-  position: relative; width: min(660px,100%); margin: 26px auto 0; padding: 18px 22px;
+  position: relative; width: min(660px,100%); margin: 42px auto 0; padding: 18px 22px;
   flex-shrink: 0; text-align: left; color: #e6d8b4;
   background: radial-gradient(ellipse at 0 0,rgba(200,168,80,.12),transparent 65%),linear-gradient(135deg,#121b2e,#0b1120);
   border: 1px solid rgba(215,183,110,.55); border-radius: 6px;
@@ -1358,6 +1358,28 @@ OTHER DEALINGS IN THE FONT SOFTWARE. */
 </style>
 <!-- VOYAGE COMPACT PREVIEW END -->
 <!-- VOYAGE DETAILS STORED FOR FUTURE WORK -->
+<!-- VOYAGE CHOICE DEMO STYLE START -->
+<style id="voyage-choice-demo-style">
+#voyage-choice-demo .vcd-lead { color: #8a9ab8; font: 15px/1.8 'Pretendard',sans-serif; margin-bottom: 22px; }
+#voyage-choice-demo .vcd-lead strong { color: #c8a850; }
+#voyage-choice-demo .vcd-list { display: grid; gap: 10px; font-family: 'Pretendard',sans-serif; }
+#voyage-choice-demo .vcd-row { position: relative; display: grid; grid-template-columns: 30px minmax(0,1fr) auto auto; gap: 8px; align-items: center; padding: 10px; background: linear-gradient(160deg,rgba(17,23,40,.96),rgba(14,20,34,.96)); border: 1px solid rgba(180,160,100,.14); border-radius: 6px; }
+#voyage-choice-demo .vcd-row::before { content: ''; position: absolute; inset: 0 14px auto; height: 1px; background: linear-gradient(90deg,transparent,rgba(200,170,80,.18),transparent); pointer-events: none; }
+#voyage-choice-demo .vcd-num { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: #c8a850; border: 1px solid rgba(200,170,80,.32); background: rgba(200,170,80,.08); font: 700 12px 'Cinzel',serif; }
+#voyage-choice-demo .vcd-text { min-width: 0; min-height: 38px; border: 1px solid rgba(180,160,100,.08); background: rgba(8,12,24,.42); color: #a8b6ce; line-height: 1.65; font-size: 14px; cursor: pointer; text-align: left; font-family: inherit; border-radius: 5px; padding: 8px 11px; word-break: keep-all; overflow-wrap: anywhere; }
+#voyage-choice-demo .vcd-text:hover { color: #ddd8c8; border-color: rgba(200,170,80,.28); background: rgba(200,170,80,.07); }
+#voyage-choice-demo .vcd-action { height: 38px; min-width: 48px; border: 1px solid rgba(200,170,80,.24); background: rgba(8,12,24,.46); color: #c8a850; border-radius: 5px; padding: 0 10px; font: 700 12px 'Pretendard',sans-serif; cursor: pointer; white-space: nowrap; }
+#voyage-choice-demo .vcd-action:hover { color: #ddd8c8; border-color: rgba(200,170,80,.45); background: rgba(200,170,80,.14); }
+#voyage-choice-demo button:focus-visible { outline: 2px solid #c8a850; outline-offset: 2px; }
+#voyage-choice-demo .vcd-draft { margin-top: 12px; padding: 13px 14px; border: 1px solid rgba(180,160,100,.12); border-radius: 6px; background: rgba(8,12,24,.52); color: #c8d0e0; font: 14px/1.8 'Pretendard',sans-serif; overflow-wrap: anywhere; }
+#voyage-choice-demo .vcd-draft strong { display: block; color: #c8a850; margin-bottom: 6px; }
+#voyage-choice-demo .vcd-notice { color: #8c9bb3; font: 13px/1.8 'Pretendard',sans-serif; margin-top: 12px; }
+@media (max-width: 720px) {
+  #voyage-choice-demo .vcd-text { font-size: 12px; padding: 8px; }
+  #voyage-choice-demo .vcd-action { min-width: 42px; padding: 0 8px; font-size: 11px; }
+}
+</style>
+<!-- VOYAGE CHOICE DEMO STYLE END -->
 </head>
 <body>
 <!-- VOYAGE BGM MARKUP START -->
@@ -2042,6 +2064,37 @@ OTHER DEALINGS IN THE FONT SOFTWARE. */
   </div>
 </div>
 
+<!-- VOYAGE CHOICE DEMO START -->
+<section class="section" id="voyage-choice-demo" aria-labelledby="voyage-choice-demo-title">
+  <div class="section-label">Choice Builder</div>
+  <h2 class="section-title" id="voyage-choice-demo-title">선택지 <span class="gold">입력 방식</span></h2>
+  <div class="section-divider"></div>
+  <p class="vcd-lead">문장 칸을 누르면 아래 입력 초안에 계속 쌓입니다. 오른쪽의 <strong>선택</strong>은 한 문장을 바로 넣고, <strong>대필</strong>은 그 문장을 길게 풀어쓰는 요청문을 보여줍니다.</p>
+  <div class="vcd-list">
+    <div class="vcd-row" role="group" aria-label="선택지 1">
+      <span class="vcd-num" aria-hidden="true">1</span>
+      <button type="button" class="vcd-text" data-vcd-action="append" data-choice="이네스에게 왜 은목걸이가 눈에 들어왔는지 조용히 묻는다.">이네스에게 왜 은목걸이가 눈에 들어왔는지 조용히 묻는다.</button>
+      <button type="button" class="vcd-action" data-vcd-action="choose" data-choice="이네스에게 왜 은목걸이가 눈에 들어왔는지 조용히 묻는다." aria-label="1번 문장 선택">선택</button>
+      <button type="button" class="vcd-action" data-vcd-action="ghost" data-choice="이네스에게 왜 은목걸이가 눈에 들어왔는지 조용히 묻는다." aria-label="1번 문장 대필 요청">대필</button>
+    </div>
+    <div class="vcd-row" role="group" aria-label="선택지 2">
+      <span class="vcd-num" aria-hidden="true">2</span>
+      <button type="button" class="vcd-text" data-vcd-action="append" data-choice="리스본 시장에 들러 출항 전 시세를 비교한다.">리스본 시장에 들러 출항 전 시세를 비교한다.</button>
+      <button type="button" class="vcd-action" data-vcd-action="choose" data-choice="리스본 시장에 들러 출항 전 시세를 비교한다." aria-label="2번 문장 선택">선택</button>
+      <button type="button" class="vcd-action" data-vcd-action="ghost" data-choice="리스본 시장에 들러 출항 전 시세를 비교한다." aria-label="2번 문장 대필 요청">대필</button>
+    </div>
+    <div class="vcd-row" role="group" aria-label="선택지 3">
+      <span class="vcd-num" aria-hidden="true">3</span>
+      <button type="button" class="vcd-text" data-vcd-action="append" data-choice="Vento Fortuna로 돌아가 마데이라 항로를 준비한다.">Vento Fortuna로 돌아가 마데이라 항로를 준비한다.</button>
+      <button type="button" class="vcd-action" data-vcd-action="choose" data-choice="Vento Fortuna로 돌아가 마데이라 항로를 준비한다." aria-label="3번 문장 선택">선택</button>
+      <button type="button" class="vcd-action" data-vcd-action="ghost" data-choice="Vento Fortuna로 돌아가 마데이라 항로를 준비한다." aria-label="3번 문장 대필 요청">대필</button>
+    </div>
+  </div>
+  <div class="vcd-draft"><strong>입력 초안</strong><span data-vcd-output role="status" aria-live="polite" aria-atomic="true">문장 칸을 누르면 여기에 선택지가 쌓입니다.</span></div>
+  <p class="vcd-notice">이 홈페이지에서는 입력 방식만 체험할 수 있습니다. 실리태번 채팅으로 전송하거나 AI가 답변·대필을 생성하지는 않습니다.</p>
+  <noscript><p class="vcd-notice">선택지 체험에는 JavaScript가 필요합니다. 위 문장은 그대로 읽을 수 있습니다.</p></noscript>
+</section>
+<!-- VOYAGE CHOICE DEMO END -->
 <!-- ═══ 플레이 가이드 ═══ -->
 <div class="section">
   <div class="section-label">✦ Life on Board</div>
@@ -3321,5 +3374,39 @@ document.querySelectorAll('.char-portrait').forEach(portrait => {
 }());
 </script>
 <!-- VOYAGE SCENE GALLERY SCRIPT END -->
+<!-- VOYAGE CHOICE DEMO SCRIPT START -->
+<script id="voyage-choice-demo-script">
+(function () {
+  'use strict';
+  const root = document.getElementById('voyage-choice-demo');
+  if (!root || root.dataset.bound === 'true') return;
+  const output = root.querySelector('[data-vcd-output]');
+  if (!output) return;
+  let draft = '';
+
+  root.querySelectorAll('button[data-vcd-action]').forEach(button => {
+    button.addEventListener('click', () => {
+      const choice = button.dataset.choice;
+      if (!choice) return;
+      switch (button.dataset.vcdAction) {
+        case 'append':
+          draft = draft ? draft + ' ' + choice : choice;
+          break;
+        case 'choose':
+          draft = '[선택 입력 예시] ' + choice;
+          break;
+        case 'ghost':
+          draft = '[대필 요청 예시] 다음 내용을 내 시점의 자연스러운 장면으로 길게 대필해줘: ' + choice;
+          break;
+        default:
+          return;
+      }
+      output.textContent = draft;
+    });
+  });
+  root.dataset.bound = 'true';
+}());
+</script>
+<!-- VOYAGE CHOICE DEMO SCRIPT END -->
 </body>
 </html>
