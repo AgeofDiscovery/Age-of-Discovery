@@ -803,9 +803,594 @@ body {
   margin-top: 20px;
   letter-spacing: 2px;
 }
+
+/* ===== Character Gallery ===== */
+.gallery-wrap {width:100%;max-width:100%;margin:8px 0 24px;}
+
+/* Character tabs */
+.char-tabs {display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;}
+.char-tab {padding:6px 12px;font-size:12px;font-weight:500;color:#5a6a80;background:rgba(15,22,38,.4);border:1px solid rgba(180,160,100,.08);border-radius:20px;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.char-tab:hover {color:#9aa8b8;border-color:rgba(180,160,100,.2);}
+.char-tab.active {color:#c8a850;background:rgba(200,170,80,.08);border-color:rgba(200,170,80,.3);box-shadow:0 0 8px rgba(200,170,80,.1);}
+
+/* Character info header */
+.char-header {display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(15,22,38,.6),rgba(20,30,50,.8));border:1px solid rgba(180,160,100,.1);border-radius:6px;}
+.char-header-icon {font-size:24px;}
+.char-header-name {font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#ddd8c8;letter-spacing:1px;}
+.char-header-orig {font-size:11px;color:#5a6a80;font-style:italic;}
+.char-header-role {font-size:11.5px;color:#c8a850;margin-top:2px;}
+.char-header-quote {font-size:11px;color:#6a7a90;font-style:italic;margin-left:auto;max-width:180px;text-align:right;line-height:1.4;}
+.char-header-desc {font-size:11.5px;color:#7a8a9a;line-height:1.5;margin-top:6px;padding:8px 14px;background:rgba(15,22,38,.3);border-left:2px solid rgba(200,170,80,.2);border-radius:0 4px 4px 0;}
+
+/* Image viewer */
+.char-viewer {position:relative;border-radius:6px;overflow:hidden;border:1px solid rgba(180,160,100,.2);box-shadow:0 2px 20px rgba(0,0,0,.4);}
+.char-track {display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;}
+.char-track::-webkit-scrollbar {display:none;}
+.char-img-slide {min-width:100%;scroll-snap-align:center;aspect-ratio:16/9;background:#111728;flex-shrink:0;position:relative;}
+.char-img-slide img {width:100%;height:100%;object-fit:cover;display:block;}
+.char-ph {width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#111728,#1a2540,#111728);color:#3a4a60;font-size:13px;gap:6px;}
+.char-ph .ph-icon {font-size:32px;opacity:.5;}
+.char-ph .ph-label {font-size:11px;color:#2a3a50;}
+.char-ph .ph-file {font-size:10px;color:#1e2a3a;font-family:monospace;}
+
+/* Nav arrows */
+.char-nav {position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(10,14,26,.55);border:1px solid rgba(180,160,100,.15);color:#c8a850;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;backdrop-filter:blur(4px);}
+.char-nav:hover {background:rgba(20,28,50,.8);border-color:rgba(200,170,80,.5);}
+.char-nav-prev {left:6px;}
+.char-nav-next {right:6px;}
+
+/* Dots + counter */
+.char-dots {display:flex;justify-content:center;gap:5px;margin-top:8px;}
+.char-dot {width:6px;height:6px;border-radius:50%;background:rgba(180,160,100,.12);border:1px solid rgba(180,160,100,.08);cursor:pointer;transition:all .3s;}
+.char-dot.active {background:#c8a850;border-color:#c8a850;box-shadow:0 0 5px rgba(200,170,80,.25);}
+.char-counter {text-align:center;margin-top:4px;font-size:10px;color:#2a3a50;letter-spacing:2px;}
+
+.gallery-wrap button {font-family:inherit;}
+.gallery-wrap .char-header {flex-wrap:wrap;}
+.gallery-wrap .char-header > div {min-width:0;}
+.gallery-wrap .char-header-name {overflow-wrap:anywhere;}
+.gallery-wrap .char-tab {min-height:36px;}
+.gallery-wrap .char-nav {width:44px;height:44px;}
+.gallery-wrap .char-nav:disabled {opacity:.3;cursor:default;}
+.gallery-wrap .char-dot {width:16px;height:16px;padding:0;}
+.gallery-wrap .char-counter,.gallery-wrap .ph-label {color:#8a9ab8;}
+.gallery-wrap .ph-file {color:#7a8a9a;overflow-wrap:anywhere;text-align:center;}
+.gallery-wrap .char-ph {padding:24px 52px;}
+.gallery-wrap button:focus-visible,.gallery-wrap .char-track:focus-visible {outline:2px solid #c8a850;outline-offset:3px;}
+.gallery-status {font-size:12px;color:#8a9ab8;text-align:center;min-height:1.5em;margin-top:8px;}
+.character-summary {margin-top:20px;}
+.character-summary > summary {color:#c8a850;cursor:pointer;padding:12px 0;}
+
 </style>
+<!-- VOYAGE ATMOSPHERE STYLE START -->
+<style id="voyage-atmosphere-style">
+:root {
+  --voyage-page-width: 1480px;
+  --voyage-page-gutter: clamp(32px, 8vw, 160px);
+  --voyage-gold-light: #f4d88d;
+  --voyage-ink: #080c18;
+}
+.section {
+  width: min(var(--voyage-page-width), calc(100% - var(--voyage-page-gutter)));
+  max-width: none;
+  padding: clamp(40px, 5vw, 76px) 0;
+}
+.section-title { font-size: clamp(28px, 2.5vw, 36px); }
+.section-label { color: #8b9bb2; }
+.section-divider {
+  width: clamp(64px, 8vw, 120px);
+  background: linear-gradient(90deg, #dfbd68, rgba(200,168,80,.06));
+}
+.lore-text { max-width: 1100px; font-size: clamp(15px, 1.15vw, 18px); color: #a8b6ce; }
+.lore-quote { max-width: 1100px; background: rgba(8,12,24,.7); }
+.hero-title { text-shadow: 0 0 64px rgba(225,182,84,.23); }
+.hero-badge { color: #99abc1; background: rgba(8,12,24,.65); border-color: rgba(213,180,104,.28); }
+.hero::before { content: none; }
+.hero .ocean { opacity: .5; }
+.hero .wave { animation: voyage-hero-wave 12s ease-in-out infinite alternate; }
+.hero .wave:nth-child(2) { animation-duration: 17s; animation-direction: alternate-reverse; }
+.footer { padding-bottom: 90px; }
+
+/* Fixed decoration remains behind every section and never captures clicks. */
+.voyage-atmosphere { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.voyage-atmosphere::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(8,12,24,.2) 18%, rgba(8,12,24,.5) 42%, rgba(8,12,24,.46) 60%, rgba(8,12,24,.16) 86%, transparent);
+}
+.voyage-milky-way {
+  position: absolute; inset: -12%;
+  background:
+    radial-gradient(ellipse 22% 18% at 77% 20%, rgba(246,215,148,.24), transparent 74%),
+    radial-gradient(ellipse 38% 28% at 14% 70%, rgba(143,171,211,.15), transparent 76%),
+    linear-gradient(145deg, transparent 29%, rgba(100,132,182,.05) 36%, rgba(195,155,76,.12) 41%, rgba(242,210,148,.2) 45%, rgba(156,177,208,.13) 48%, rgba(207,165,80,.07) 53%, transparent 61%);
+  opacity: .9;
+  animation: voyage-galaxy-drift 32s ease-in-out infinite alternate;
+}
+.voyage-star-dust { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .9; }
+.voyage-constellation { fill: #ffe7aa; }
+.voyage-horizon {
+  position: absolute; left: -6%; bottom: -3%; width: 112%; height: clamp(160px, 30vh, 340px);
+  background: radial-gradient(ellipse at 50% 100%, rgba(200,157,59,.08), transparent 72%);
+}
+.voyage-golden-sea { width: 100%; height: 100%; overflow: visible; }
+.voyage-golden-sea g { transform-box: fill-box; transform-origin: center; }
+.voyage-tide-back { opacity: .5; animation: voyage-tide-back 24s ease-in-out infinite alternate; }
+.voyage-tide-front { opacity: .72; animation: voyage-tide-front 18s ease-in-out infinite alternate; }
+.stars-bg { animation: voyage-star-glow 8s ease-in-out infinite alternate; }
+.shooting-star {
+  width: clamp(110px, 14vw, 220px); height: 2px;
+  background: linear-gradient(90deg, #ffefbe, rgba(235,192,99,.65) 16%, transparent);
+}
+.shooting-star::before { background: #fff1cc; box-shadow: 0 0 10px 2px rgba(244,207,130,.65); }
+.ss1 { top: 10%; left: 86%; animation: voyage-meteor 11s linear 1s infinite; }
+.ss2 { top: 42%; left: 20%; animation: voyage-meteor 17s linear 6s infinite; }
+.ss3 { top: 67%; left: 94%; animation: voyage-meteor 23s linear 12s infinite; }
+@keyframes voyage-galaxy-drift {
+  from { transform: translate3d(-1%, 1%, 0) scale(1); }
+  to { transform: translate3d(1%, -1%, 0) scale(1.025); }
+}
+@keyframes voyage-tide-back { from { transform: translate3d(-2%, 3%, 0); } to { transform: translate3d(2%, -3%, 0); } }
+@keyframes voyage-tide-front { from { transform: translate3d(2%, -2%, 0); } to { transform: translate3d(-2%, 4%, 0); } }
+@keyframes voyage-hero-wave { from { transform: translateX(0); } to { transform: translateX(-4%); } }
+@keyframes voyage-star-glow { from { opacity: .65; } to { opacity: 1; } }
+@keyframes voyage-meteor {
+  0% { opacity: 0; transform: rotate(-32deg) translateX(0); }
+  4% { opacity: .92; }
+  16% { opacity: 0; transform: rotate(-32deg) translateX(-60vw); }
+  100% { opacity: 0; transform: rotate(-32deg) translateX(-60vw); }
+}
+
+/* A native checkbox pauses decorative motion without adding runtime JS. */
+.voyage-motion-toggle { position: fixed; right: 20px; bottom: 20px; width: 1px; height: 1px; opacity: 0; }
+.voyage-motion-control {
+  position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 20; display: flex; align-items: center; gap: 9px; min-height: 40px; padding: 8px 14px;
+  border: 1px solid rgba(215,183,110,.38); border-radius: 24px; color: #ddcfaa;
+  background: rgba(8,12,24,.94); font-size: 12px; cursor: pointer; user-select: none;
+}
+.voyage-motion-control::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #e0be70; box-shadow: 0 0 8px rgba(224,190,112,.5); }
+.voyage-motion-control:hover { border-color: #d7b76e; color: #fff0cb; }
+.voyage-motion-paused { display: none; }
+#voyage-motion-toggle:focus-visible + .voyage-motion-control { outline: 2px solid var(--voyage-gold-light); outline-offset: 4px; }
+#voyage-motion-toggle:checked + .voyage-motion-control .voyage-motion-running { display: none; }
+#voyage-motion-toggle:checked + .voyage-motion-control .voyage-motion-paused { display: inline; }
+#voyage-motion-toggle:checked + .voyage-motion-control::before { background: #7f8ca3; box-shadow: none; }
+#voyage-motion-toggle:checked ~ .voyage-atmosphere *,
+#voyage-motion-toggle:checked ~ .stars-bg,
+#voyage-motion-toggle:checked ~ .shooting-star,
+#voyage-motion-toggle:checked ~ .hero .wave,
+#voyage-motion-toggle:checked ~ .hero .hero-compass { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .voyage-atmosphere *, .stars-bg, .shooting-star, .hero .wave, .hero .hero-compass { animation: none !important; }
+  .shooting-star, .voyage-motion-toggle, .voyage-motion-control { display: none; }
+}
+
+/* VOYAGE TIDE AND TWINKLE START */
+/* One viewport-anchored sea, with independently moving crests and star phases. */
+.voyage-horizon {
+  left: -15%; bottom: -24px; width: 130%; height: clamp(180px, 28vh, 300px);
+  z-index: 1;
+}
+.voyage-golden-sea g { transform-box: view-box; transform-origin: 50% 100%; }
+.voyage-tide-back { opacity: .35; animation: voyage-sea-swell-back 9s ease-in-out -4.5s infinite alternate; }
+.voyage-tide-front { opacity: .50; animation: voyage-sea-swell-front 6.5s ease-in-out -2s infinite alternate; }
+.voyage-golden-sea path { vector-effect: non-scaling-stroke; }
+@keyframes voyage-sea-swell-back {
+  from { transform: translate3d(-3%, 8px, 0) scaleY(.96); }
+  to { transform: translate3d(3%, -10px, 0) scaleY(1.04); }
+}
+@keyframes voyage-sea-swell-front {
+  from { transform: translate3d(3%, -12px, 0) scaleY(1.04); }
+  to { transform: translate3d(-3%, 10px, 0) scaleY(.96); }
+}
+.voyage-star-dust { z-index: 1; opacity: 1; }
+.voyage-star-dust circle { animation: voyage-dust-twinkle 4.8s ease-in-out -1.2s infinite; }
+.voyage-star-dust circle:nth-child(3n) { animation-duration: 6.2s; animation-delay: -3.4s; }
+.voyage-star-dust circle:nth-child(3n + 1) { animation-duration: 3.8s; animation-delay: -2.7s; }
+.voyage-star-dust circle:nth-child(5n) { animation-delay: -.4s; }
+.voyage-constellation path { animation: voyage-beacon-twinkle 5.6s ease-in-out -1.8s infinite; }
+.voyage-constellation path:nth-child(2) { animation-delay: -3.7s; }
+.voyage-constellation path:nth-child(3) { animation-delay: -.5s; }
+@keyframes voyage-dust-twinkle {
+  0%, 100% { opacity: .18; }
+  50% { opacity: 1; }
+}
+@keyframes voyage-beacon-twinkle {
+  0%, 100% { opacity: .3; }
+  50% { opacity: 1; }
+}
+/* VOYAGE TIDE AND TWINKLE END */
+</style>
+<!-- VOYAGE ATMOSPHERE STYLE END -->
+<!-- VOYAGE BGM STYLE START -->
+<style id="voyage-bgm-style">
+.voyage-bgm {
+  position: fixed; left: max(16px, env(safe-area-inset-left)); bottom: calc(72px + env(safe-area-inset-bottom));
+  z-index: 20; width: min(320px, calc(100% - 32px)); padding: 10px 12px;
+  border: 1px solid rgba(215,183,110,.38); border-radius: 12px;
+  background: rgba(8,12,24,.96); color: #ddcfaa; font-size: 12px;
+  box-shadow: 0 6px 28px rgba(0,0,0,.3);
+}
+.voyage-bgm-row { display: flex; align-items: center; gap: 8px; }
+.voyage-bgm button, .voyage-bgm summary {
+  min-height: 40px; padding: 8px 12px; font: inherit; color: #eed9a4; cursor: pointer;
+  border: 1px solid rgba(215,183,110,.28); border-radius: 8px; background: rgba(200,168,80,.07);
+}
+.voyage-bgm button:hover, .voyage-bgm summary:hover { border-color: #d7b76e; background: rgba(200,168,80,.14); }
+.voyage-bgm button:focus-visible, .voyage-bgm summary:focus-visible, .voyage-bgm input:focus-visible { outline: 2px solid #f4d88d; outline-offset: 3px; }
+.voyage-bgm button { flex: 1; }
+.voyage-bgm details { flex: 1; }
+.voyage-bgm summary { text-align: center; list-style: none; }
+.voyage-bgm summary::-webkit-details-marker { display: none; }
+.voyage-bgm-options {
+  position: absolute; bottom: calc(100% + 8px); left: 0; width: 100%; padding: 14px;
+  background: #0d1424; border: 1px solid rgba(215,183,110,.4); border-radius: 12px;
+  box-shadow: 0 6px 28px rgba(0,0,0,.3);
+}
+.voyage-bgm-title { color: #e3d4b1; font-family: 'Cinzel', serif; font-size: 13px; margin-bottom: 12px; overflow-wrap: anywhere; }
+.voyage-bgm-options button { width: 100%; margin-bottom: 12px; }
+.voyage-bgm-volume-row { display: flex; align-items: center; gap: 10px; }
+.voyage-bgm-volume-row input { flex: 1; width: 0; min-width: 0; accent-color: #d7b76e; min-height: 32px; }
+.voyage-bgm-volume-row output { min-width: 32px; text-align: right; }
+.voyage-bgm-status { color: #a8b6ce; font-size: 11px; line-height: 1.5; margin-top: 7px; }
+</style>
+<!-- VOYAGE BGM STYLE END -->
+<!-- VOYAGE GALLERY ASSETS STYLE START -->
+<style id="voyage-gallery-assets-style">
+.gallery-wrap .char-img-slide img { object-fit: contain; }
+</style>
+<!-- VOYAGE GALLERY ASSETS STYLE END -->
+<!-- VOYAGE CHARACTER PORT STYLE START -->
+<style id="voyage-character-port-style">
+.character-intro-kicker { margin-bottom: 22px; color: #a0acbd; font-size: 15px; }
+.gallery-wrap .char-tabs { gap: 12px; align-items: center; margin-bottom: 24px; }
+.char-tab-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
+.char-tab-group-support { border-inline-start: 1px solid #727985; padding-inline-start: 14px; }
+.gallery-wrap .char-tab { font-family: 'Cinzel', serif; font-size: 12px; min-height: 40px; }
+.gallery-wrap .char-tab-support { color: #a9adb7; border-color: rgba(163,170,184,.25); background: rgba(126,135,151,.06); }
+.gallery-wrap .char-tab-support:hover { color: #e0e2e7; border-color: #9299a5; }
+.gallery-wrap .char-tab-support.active { color: #e0e2e7; border-color: #9299a5; background: rgba(156,163,177,.16); box-shadow: none; }
+.character-feature { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.25fr); gap: clamp(20px,3vw,42px); align-items: start; }
+.character-profile, .character-gallery-pane { min-width: 0; }
+.character-profile { padding: clamp(20px,2.4vw,34px); background: linear-gradient(145deg,rgba(18,25,42,.95),rgba(12,18,31,.9)); border: 1px solid rgba(200,168,80,.22); border-radius: 10px; }
+.gallery-wrap .char-header { padding: 0; margin: 8px 0 12px; background: none; border: 0; gap: 14px; }
+.gallery-wrap .char-header-name { font-size: 21px; line-height: 1.5; }
+.gallery-wrap .char-header-orig { font-size: 14px; color: #a3afc2; }
+.gallery-wrap .char-header-role { font-size: 14px; line-height: 1.7; }
+.gallery-wrap .char-header-quote { margin: 22px 0; max-width: none; text-align: left; font-size: clamp(20px,1.65vw,26px); line-height: 1.65; font-style: normal; color: #e6d8b4; overflow-wrap: anywhere; }
+.character-summary-role { font: 12px 'Cinzel',serif; letter-spacing: 1.5px; color: #c8a850; text-transform: uppercase; }
+.character-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 22px; }
+.character-tags .char-tag { font-size: 12px; line-height: 1.5; margin: 0; padding: 4px 10px; }
+.character-appearance-title { border-top: 1px solid rgba(200,168,80,.16); padding-top: 18px; font-size: 12px; color: #a0acbd; }
+.gallery-wrap .char-header-desc { margin: 8px 0 0; padding: 0; background: none; border: 0; font-size: 14px; line-height: 1.9; color: #b3bfd0; }
+.character-feature .char-img-slide { aspect-ratio: 1216 / 832; }
+.character-feature.is-support { grid-template-columns: minmax(0,1fr); }
+.character-feature.is-support .character-profile { max-width: 1000px; border-color: rgba(163,170,184,.3); }
+.character-feature.is-support .character-gallery-pane { display: none; }
+.character-feature.is-support .character-summary-role,
+.character-feature.is-support .char-header-role,
+.character-feature.is-support .char-tag { color: #b9bec8; border-color: rgba(163,170,184,.35); }
+.character-feature.is-support .char-header-quote { color: #dde0e7; }
+.port-scenes { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,340px),1fr)); gap: 20px; }
+.port-scenes .route { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 0; padding: 0; overflow: hidden; border-radius: 10px; align-items: center; background: rgba(15,22,37,.92); }
+.route-scene { display: block; grid-column: 1 / -1; width: 100%; height: auto; aspect-ratio: 1216 / 832; object-fit: contain; border-bottom: 1px solid rgba(200,168,80,.23); }
+.port-scenes .route-icon { padding: 18px 12px 18px 18px; }
+.port-scenes .route > div:not(.route-goods) { padding: 16px 18px 16px 0; min-width: 0; }
+.port-scenes .route-name { font-size: 18px; }
+.port-scenes .route-desc { font-size: 13px; line-height: 1.6; color: #a3afc2; }
+.port-scenes .route-goods { grid-column: 1 / -1; margin: 0 18px; padding: 12px 0 16px; text-align: left; font-size: 13px; border-top: 1px solid rgba(200,168,80,.15); }
+@media (max-width: 900px) { .character-feature { grid-template-columns: minmax(0,1fr); } }
+</style>
+<!-- VOYAGE CHARACTER PORT STYLE END -->
+<!-- VOYAGE PRESENTATION REPAIR STYLE START -->
+<style id="voyage-presentation-repair-style">
+.character-profile { padding: 16px; background: linear-gradient(160deg,#111728,#151d30); border: 1px solid rgba(180,160,100,.12); border-radius: 6px; }
+.character-summary-role { font-size: 10px; color: #5a6a80; letter-spacing: 2px; margin-bottom: 6px; }
+.gallery-wrap .char-header { margin: 8px 0; }
+.gallery-wrap .char-header-name, .gallery-wrap .char-header-quote { font-family: 'Cinzel',serif; font-style: normal; }
+.gallery-wrap .char-header-name { font-size: 21px; font-weight: 700; color: #ddd8c8; line-height: 1.5; }
+.gallery-wrap .char-header-orig { font-size: 14px; color: #a3afc2; font-style: italic; }
+.gallery-wrap .char-header-role { font-size: 12px; color: #6a7a9a; line-height: 1.6; }
+.gallery-wrap .char-header-quote { font-size: 14px; font-weight: 400; color: #7a8aa0; line-height: 1.6; font-style: italic; margin: 14px 0 8px; padding: 8px 10px; background: rgba(10,14,26,.4); border-left: 2px solid rgba(200,170,80,.15); border-radius: 0 4px 4px 0; }
+.character-tags { gap: 4px; margin-bottom: 16px; }
+.character-tags .char-tag { font-size: 10px; padding: 2px 8px; margin-top: 8px; border-radius: 10px; color: #c8a850; border-color: rgba(200,170,80,.2); }
+.character-appearance-title { padding-top: 12px; font-size: 10px; color: #5a6a80; }
+.gallery-wrap .char-header-desc { font-size: 12.5px; line-height: 1.8; color: #7a8aa0; }
+.character-feature.is-support .character-summary-role, .character-feature.is-support .char-header-role, .character-feature.is-support .char-tag { color: #8e96a4; }
+.character-feature.is-support .char-header-quote { color: #7a8aa0; }
+/* Bound each flex page to the viewer, never the image's intrinsic width. */
+.gallery-wrap .char-viewer, .gallery-wrap .char-track { width: 100%; min-width: 0; max-width: 100%; }
+.gallery-wrap .char-img-slide { flex: 0 0 100%; width: 100%; min-width: 0; max-width: 100%; height: auto; aspect-ratio: 1216 / 832; position: relative; }
+.gallery-wrap .char-img-slide img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: 100%; object-fit: contain; object-position: center; }
+.gallery-wrap .char-ph { position: absolute; inset: 0; }
+.scene-gallery { grid-column: 1 / -1; width: 100%; min-width: 0; margin: 0; background: rgba(10,14,26,.6); }
+.scene-viewport { position: relative; width: 100%; aspect-ratio: 1216 / 832; overflow: hidden; background: #111728; }
+.scene-image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: 100%; object-fit: contain; object-position: center; }
+.scene-controls { display: flex; justify-content: center; align-items: center; gap: 18px; padding: 4px 12px 8px; }
+.scene-controls button { width: 40px; height: 36px; border: 1px solid rgba(200,170,80,.2); border-radius: 5px; background: rgba(200,170,80,.04); font: 16px 'Cinzel',serif; color: #c8a850; cursor: pointer; }
+.scene-controls button:disabled { opacity: .25; cursor: default; }
+.scene-controls button:hover:not(:disabled) { border-color: #c8a850; }
+.scene-counter { font-size: 11px; color: #8a9ab8; letter-spacing: 1px; min-width: 46px; text-align: center; }
+.scene-gallery:focus-visible, .scene-controls button:focus-visible { outline: 2px solid #c8a850; outline-offset: 3px; }
+.scene-status { position: absolute; inset: 0; display: grid; place-items: center; padding: 22px; font-size: 12px; color: #8a9ab8; text-align: center; pointer-events: none; }
+.scene-status:empty { display: none; }
+.life-scenes { max-width: 900px; margin: 24px auto; border: 1px solid rgba(200,170,80,.2); border-radius: 8px; overflow: hidden; }
+</style>
+<!-- VOYAGE PRESENTATION REPAIR STYLE END -->
+<!-- VOYAGE LIFE GRID STYLE START -->
+<style id="voyage-life-grid-style">
+.life-card-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; align-items: stretch; }
+.life-card-grid > .qr-item, .life-card-grid > .qr-item > div { min-width: 0; overflow-wrap: anywhere; }
+</style>
+<!-- VOYAGE LIFE GRID STYLE END -->
+<!-- VOYAGE SHIP GRID STYLE START -->
+<style id="voyage-ship-grid-style">
+.ship-card-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; align-items: stretch; }
+.ship-card-grid > .qr-item { min-width: 0; flex-wrap: wrap; }
+.ship-card-grid > .qr-item > div { min-width: 0; flex-basis: 120px; overflow-wrap: anywhere; }
+</style>
+<!-- VOYAGE SHIP GRID STYLE END -->
+<!-- VOYAGE SCENE SLIDE STYLE START -->
+<style id="voyage-scene-slide-style">
+.scene-track { display: flex; width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+.scene-track::-webkit-scrollbar { display: none; }
+.scene-slide { position: relative; flex: 0 0 100%; width: 100%; min-width: 0; max-width: 100%; aspect-ratio: 1216 / 832; scroll-snap-align: start; }
+#voyage-motion-toggle:checked ~ .section .scene-track { scroll-behavior: auto; }
+@media (prefers-reduced-motion: reduce) { .scene-track { scroll-behavior: auto; } }
+</style>
+<!-- VOYAGE SCENE SLIDE STYLE END -->
+<!-- VOYAGE COMPARISON WATER STYLE START -->
+<style id="voyage-comparison-water-style">
+.voyage-comparison-water { pointer-events: none; }
+.voyage-comparison-water-wave { transform-box: view-box; }
+.voyage-comparison-water-back { animation: voyage-comparison-water-back 14s linear infinite; }
+.voyage-comparison-water-front { animation: voyage-comparison-water-front 8s linear infinite; }
+@keyframes voyage-comparison-water-back {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(180px, -1.5px); }
+  100% { transform: translate(360px, 0); }
+}
+@keyframes voyage-comparison-water-front {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-120px, 2px); }
+  100% { transform: translate(-240px, 0); }
+}
+#voyage-motion-toggle:checked ~ .section .voyage-comparison-water-wave { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .voyage-comparison-water-wave { animation: none; } }
+</style>
+<!-- VOYAGE COMPARISON WATER STYLE END -->
 </head>
 <body>
+<!-- VOYAGE BGM MARKUP START -->
+<audio id="voyage-bgm-audio" preload="none" hidden></audio>
+<div class="voyage-bgm" role="group" aria-label="배경음악">
+  <div class="voyage-bgm-row">
+    <button type="button" id="voyage-bgm-toggle" aria-pressed="false">음악 켜기</button>
+    <details>
+      <summary>음악 설정</summary>
+      <div class="voyage-bgm-options">
+        <p class="voyage-bgm-title" id="voyage-bgm-title">1 / 2 · Caravel of Dawn</p>
+        <button type="button" id="voyage-bgm-next">다음 곡</button>
+        <div class="voyage-bgm-volume-row">
+          <label for="voyage-bgm-volume">음량</label>
+          <input type="range" id="voyage-bgm-volume" min="0" max="100" step="1" value="25">
+          <output id="voyage-bgm-level" for="voyage-bgm-volume">25%</output>
+        </div>
+      </div>
+    </details>
+  </div>
+  <p class="voyage-bgm-status" id="voyage-bgm-status" role="status" aria-live="polite">음악 준비 중</p>
+</div>
+<script id="voyage-bgm-script">
+(function () {
+  'use strict';
+  function initVoyageMusic() {
+    var audio = document.getElementById('voyage-bgm-audio');
+    var toggle = document.getElementById('voyage-bgm-toggle');
+    var next = document.getElementById('voyage-bgm-next');
+    var volume = document.getElementById('voyage-bgm-volume');
+    var level = document.getElementById('voyage-bgm-level');
+    var title = document.getElementById('voyage-bgm-title');
+    var status = document.getElementById('voyage-bgm-status');
+    if (!audio || !toggle) return;
+    var tracks = [
+      { title: 'Caravel of Dawn', src: 'audio/caravel-of-dawn.mp3' },
+      { title: 'Rota da Esperança', src: 'audio/rota-da-esperanca.mp3' }
+    ];
+    var storageKey = 'voyage-bgm-v1';
+    var enabled = true;
+    var loudness = 0.25;
+    var trackIndex = 0;
+    var waitingForGesture = false;
+    var pending = false;
+    var attempt = 0;
+    var listening = false;
+    try {
+      var saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+      if (saved && typeof saved.enabled === 'boolean') enabled = saved.enabled;
+      if (saved && Number.isFinite(saved.volume)) loudness = Math.max(0, Math.min(1, saved.volume));
+    } catch (error) { /* Storage may be unavailable for local files or private browsing. */ }
+
+    function save() {
+      try { localStorage.setItem(storageKey, JSON.stringify({ enabled: enabled, volume: loudness })); } catch (error) {}
+    }
+    function render(message) {
+      var active = enabled && (pending || !audio.paused);
+      toggle.textContent = active ? '음악 끄기' : '음악 켜기';
+      toggle.setAttribute('aria-pressed', String(active));
+      title.textContent = (trackIndex + 1) + ' / ' + tracks.length + ' · ' + tracks[trackIndex].title;
+      if (message) status.textContent = message;
+    }
+    function listenForGesture(on) {
+      if (listening === on) return;
+      listening = on;
+      var method = on ? 'addEventListener' : 'removeEventListener';
+      document[method]('click', onGesture);
+      document[method]('keydown', onGesture);
+    }
+    function onGesture(event) {
+      if (!event.isTrusted || !enabled || !waitingForGesture) return;
+      var target = event.target;
+      if (target && target.closest && target.closest('.voyage-bgm')) return;
+      if (event.type === 'keydown') {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (target && target.closest && target.closest('input, textarea, select, [contenteditable]')) return;
+      }
+      start();
+    }
+    function failed(message) {
+      attempt++;
+      enabled = false;
+      pending = false;
+      waitingForGesture = false;
+      listenForGesture(false);
+      audio.pause();
+      render(message);
+    }
+    function start() {
+      if (!enabled) return;
+      var ticket = ++attempt;
+      pending = true;
+      waitingForGesture = false;
+      render('음악을 준비하고 있습니다.');
+      function rejected(error) {
+        if (ticket !== attempt || !enabled) return;
+        pending = false;
+        if (error && error.name === 'NotAllowedError') {
+          waitingForGesture = true;
+          listenForGesture(true);
+          render('화면을 누르면 음악이 시작됩니다.');
+        } else {
+          failed('재생하지 못했습니다. 음악 켜기 또는 다음 곡을 눌러주세요.');
+        }
+      }
+      try {
+        // Call play synchronously so a click/tap can supply browser user activation.
+        var result = audio.play();
+        Promise.resolve(result).then(function () {
+          if (ticket !== attempt || !enabled) return;
+          pending = false;
+          waitingForGesture = false;
+          listenForGesture(false);
+          render('재생 중 · 두 곡 순서대로 반복');
+        }, rejected);
+      } catch (error) { rejected(error); }
+    }
+    function stop() {
+      attempt++;
+      enabled = false;
+      pending = false;
+      waitingForGesture = false;
+      listenForGesture(false);
+      audio.pause();
+      save();
+      render('음악 꺼짐');
+    }
+    function selectTrack(index) {
+      attempt++;
+      pending = false;
+      waitingForGesture = false;
+      trackIndex = index % tracks.length;
+      audio.src = tracks[trackIndex].src;
+      render(enabled ? '다음 곡을 준비하고 있습니다.' : '음악 꺼짐');
+    }
+    function applyVolume() {
+      try { audio.volume = loudness; } catch (error) {}
+      audio.muted = loudness === 0;
+      volume.value = String(Math.round(loudness * 100));
+      level.textContent = volume.value + '%';
+      volume.setAttribute('aria-valuetext', volume.value + '%');
+    }
+    toggle.addEventListener('click', function () {
+      if (enabled && (pending || !audio.paused)) { stop(); return; }
+      enabled = true;
+      save();
+      start();
+    });
+    next.addEventListener('click', function () {
+      selectTrack(trackIndex + 1);
+      if (enabled) start();
+    });
+    volume.addEventListener('input', function () {
+      var value = Number(volume.value);
+      if (!Number.isFinite(value)) return;
+      loudness = Math.max(0, Math.min(1, value / 100));
+      applyVolume();
+      save();
+    });
+    audio.addEventListener('ended', function () {
+      if (!enabled) return;
+      selectTrack(trackIndex + 1);
+      start();
+    });
+    audio.addEventListener('playing', function () {
+      if (!enabled) { audio.pause(); return; }
+      pending = false;
+      waitingForGesture = false;
+      listenForGesture(false);
+      render('재생 중 · 두 곡 순서대로 반복');
+    });
+    audio.addEventListener('pause', function () {
+      if (enabled && !pending && !audio.ended) render('음악 일시정지');
+    });
+    audio.addEventListener('error', function () {
+      if (audio.error) failed('음악 파일을 읽지 못했습니다. audio 폴더를 확인해주세요.');
+    });
+    window.addEventListener('pagehide', function () {
+      attempt++;
+      pending = false;
+      audio.pause();
+    });
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted && enabled) start();
+    });
+    // Apply saved settings before the first playback request, not native autoplay.
+    applyVolume();
+    selectTrack(0);
+    if (enabled) start(); else render('음악 꺼짐 · 이전 설정 유지');
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initVoyageMusic, { once: true });
+  else initVoyageMusic();
+}());
+</script>
+<!-- VOYAGE BGM MARKUP END -->
+
+<!-- VOYAGE ATMOSPHERE MARKUP START -->
+<input type="checkbox" id="voyage-motion-toggle" class="voyage-motion-toggle">
+<label for="voyage-motion-toggle" class="voyage-motion-control">
+  <span class="voyage-motion-running">배경 움직임 멈춤</span><span class="voyage-motion-paused">배경 움직임 재생</span>
+</label>
+<div class="voyage-atmosphere" aria-hidden="true">
+  <div class="voyage-milky-way"></div>
+  <svg class="voyage-star-dust" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" focusable="false">
+    <g fill="#eed49b"><circle cx="1306.6" cy="152.8" r="2.10" opacity="0.55"/><circle cx="189.4" cy="750.5" r="1.10" opacity="0.26"/><circle cx="59.5" cy="563.0" r="1.06" opacity="0.53"/><circle cx="937.9" cy="952.0" r="1.12" opacity="0.26"/><circle cx="1160.6" cy="132.7" r="0.62" opacity="0.64"/><circle cx="67.5" cy="773.2" r="1.08" opacity="0.49"/><circle cx="1068.6" cy="874.2" r="0.63" opacity="0.71"/><circle cx="1105.4" cy="612.9" r="1.24" opacity="0.58"/><circle cx="632.6" cy="412.8" r="1.15" opacity="0.39"/><circle cx="1445.4" cy="757.4" r="0.97" opacity="0.75"/><circle cx="76.5" cy="512.3" r="1.15" opacity="0.75"/><circle cx="889.1" cy="772.4" r="1.21" opacity="0.71"/><circle cx="1389.6" cy="498.4" r="1.30" opacity="0.38"/><circle cx="286.2" cy="459.0" r="0.82" opacity="0.58"/><circle cx="817.1" cy="245.1" r="0.68" opacity="0.65"/><circle cx="1475.0" cy="370.3" r="1.17" opacity="0.54"/><circle cx="250.8" cy="723.9" r="0.81" opacity="0.77"/><circle cx="523.5" cy="892.5" r="1.34" opacity="0.54"/><circle cx="719.7" cy="114.7" r="1.31" opacity="0.62"/><circle cx="1469.3" cy="886.5" r="0.87" opacity="0.71"/><circle cx="380.6" cy="479.8" r="1.22" opacity="0.77"/><circle cx="961.0" cy="893.7" r="1.00" opacity="0.48"/><circle cx="208.7" cy="0.2" r="0.68" opacity="0.54"/><circle cx="1398.4" cy="903.2" r="2.10" opacity="0.38"/><circle cx="80.6" cy="867.8" r="1.17" opacity="0.78"/><circle cx="626.1" cy="858.1" r="1.10" opacity="0.61"/><circle cx="1349.8" cy="502.5" r="0.69" opacity="0.52"/><circle cx="871.7" cy="130.7" r="1.08" opacity="0.82"/><circle cx="189.1" cy="393.5" r="1.19" opacity="0.72"/><circle cx="186.7" cy="377.5" r="0.89" opacity="0.55"/><circle cx="598.6" cy="13.0" r="1.27" opacity="0.60"/><circle cx="1046.6" cy="855.4" r="1.07" opacity="0.67"/><circle cx="380.0" cy="565.2" r="0.93" opacity="0.26"/><circle cx="542.5" cy="667.8" r="1.19" opacity="0.69"/><circle cx="789.8" cy="418.5" r="1.28" opacity="0.60"/><circle cx="484.6" cy="852.6" r="0.66" opacity="0.48"/><circle cx="292.4" cy="348.9" r="0.60" opacity="0.53"/><circle cx="4.8" cy="282.4" r="0.98" opacity="0.38"/><circle cx="1213.2" cy="597.5" r="0.61" opacity="0.29"/><circle cx="1060.2" cy="377.4" r="1.12" opacity="0.25"/><circle cx="491.8" cy="738.9" r="1.07" opacity="0.77"/><circle cx="1236.3" cy="630.8" r="0.58" opacity="0.60"/><circle cx="1335.2" cy="363.3" r="1.26" opacity="0.65"/><circle cx="1049.8" cy="947.1" r="1.30" opacity="0.80"/><circle cx="970.5" cy="570.4" r="1.17" opacity="0.28"/><circle cx="151.8" cy="791.7" r="1.24" opacity="0.57"/><circle cx="898.7" cy="276.1" r="2.10" opacity="0.28"/><circle cx="399.9" cy="19.4" r="0.67" opacity="0.72"/><circle cx="397.5" cy="779.6" r="0.82" opacity="0.82"/><circle cx="366.0" cy="260.7" r="0.81" opacity="0.45"/><circle cx="251.7" cy="14.7" r="0.91" opacity="0.31"/><circle cx="319.3" cy="364.5" r="0.93" opacity="0.46"/><circle cx="126.3" cy="292.2" r="1.33" opacity="0.43"/><circle cx="530.7" cy="468.7" r="0.62" opacity="0.34"/><circle cx="256.2" cy="566.0" r="0.87" opacity="0.73"/><circle cx="1340.3" cy="242.1" r="0.63" opacity="0.41"/><circle cx="1390.6" cy="439.4" r="1.14" opacity="0.26"/><circle cx="573.2" cy="887.0" r="0.57" opacity="0.74"/><circle cx="459.3" cy="948.4" r="1.16" opacity="0.80"/><circle cx="1054.9" cy="203.6" r="1.13" opacity="0.47"/><circle cx="1137.5" cy="407.6" r="1.30" opacity="0.83"/><circle cx="1026.9" cy="716.3" r="0.58" opacity="0.46"/><circle cx="912.1" cy="317.9" r="0.75" opacity="0.62"/><circle cx="1062.7" cy="864.0" r="0.83" opacity="0.35"/><circle cx="1046.8" cy="337.7" r="1.20" opacity="0.43"/><circle cx="282.9" cy="251.6" r="1.14" opacity="0.67"/><circle cx="1048.2" cy="315.6" r="0.81" opacity="0.32"/><circle cx="1071.2" cy="964.4" r="0.66" opacity="0.56"/><circle cx="31.1" cy="386.7" r="0.78" opacity="0.81"/><circle cx="1490.1" cy="945.3" r="2.10" opacity="0.39"/><circle cx="788.7" cy="115.1" r="0.65" opacity="0.30"/><circle cx="354.8" cy="622.5" r="0.90" opacity="0.36"/><circle cx="192.1" cy="709.9" r="1.18" opacity="0.75"/><circle cx="316.2" cy="159.6" r="0.93" opacity="0.31"/><circle cx="594.8" cy="762.1" r="1.00" opacity="0.30"/><circle cx="1363.4" cy="912.5" r="0.91" opacity="0.49"/><circle cx="80.4" cy="524.5" r="1.29" opacity="0.42"/><circle cx="445.6" cy="714.5" r="1.17" opacity="0.24"/><circle cx="1208.4" cy="959.9" r="0.62" opacity="0.32"/><circle cx="1089.6" cy="684.0" r="0.96" opacity="0.37"/><circle cx="642.3" cy="618.6" r="0.86" opacity="0.61"/><circle cx="1477.6" cy="95.5" r="0.69" opacity="0.59"/><circle cx="477.8" cy="810.7" r="1.27" opacity="0.26"/><circle cx="1025.6" cy="324.4" r="0.95" opacity="0.50"/><circle cx="1270.7" cy="162.4" r="1.35" opacity="0.67"/><circle cx="1461.5" cy="49.8" r="0.83" opacity="0.41"/><circle cx="765.4" cy="470.3" r="0.56" opacity="0.56"/><circle cx="803.0" cy="607.8" r="1.10" opacity="0.30"/><circle cx="1522.4" cy="136.0" r="1.32" opacity="0.43"/><circle cx="1036.0" cy="370.3" r="0.95" opacity="0.36"/><circle cx="247.4" cy="828.7" r="0.79" opacity="0.25"/><circle cx="692.4" cy="537.9" r="1.29" opacity="0.39"/><circle cx="418.4" cy="828.1" r="2.10" opacity="0.74"/><circle cx="1122.4" cy="377.6" r="1.12" opacity="0.44"/><circle cx="1278.1" cy="170.0" r="0.83" opacity="0.56"/><circle cx="612.2" cy="655.6" r="0.86" opacity="0.57"/><circle cx="1246.3" cy="230.2" r="0.94" opacity="0.62"/><circle cx="952.0" cy="420.8" r="0.96" opacity="0.32"/><circle cx="1265.2" cy="297.3" r="1.31" opacity="0.55"/><circle cx="1371.5" cy="197.7" r="0.58" opacity="0.60"/><circle cx="285.8" cy="856.9" r="0.82" opacity="0.79"/><circle cx="1453.3" cy="115.9" r="1.22" opacity="0.76"/><circle cx="1494.9" cy="80.0" r="0.84" opacity="0.26"/><circle cx="1223.5" cy="203.8" r="0.85" opacity="0.67"/><circle cx="655.5" cy="671.9" r="0.74" opacity="0.71"/><circle cx="942.3" cy="372.9" r="0.93" opacity="0.38"/><circle cx="1347.6" cy="294.1" r="1.01" opacity="0.26"/><circle cx="594.5" cy="696.6" r="1.02" opacity="0.47"/><circle cx="1108.5" cy="358.0" r="0.87" opacity="0.25"/><circle cx="680.3" cy="620.3" r="0.79" opacity="0.64"/><circle cx="1274.0" cy="312.3" r="1.04" opacity="0.62"/><circle cx="1105.8" cy="424.1" r="0.65" opacity="0.73"/><circle cx="518.2" cy="621.4" r="1.13" opacity="0.27"/><circle cx="1373.8" cy="218.4" r="1.06" opacity="0.54"/><circle cx="895.0" cy="557.3" r="1.25" opacity="0.33"/><circle cx="474.2" cy="631.8" r="2.10" opacity="0.82"/><circle cx="254.9" cy="854.3" r="1.03" opacity="0.34"/><circle cx="244.3" cy="922.7" r="1.21" opacity="0.54"/><circle cx="1471.7" cy="64.8" r="0.97" opacity="0.49"/><circle cx="397.0" cy="698.2" r="1.24" opacity="0.24"/><circle cx="764.1" cy="464.4" r="1.22" opacity="0.24"/><circle cx="578.0" cy="648.2" r="1.10" opacity="0.82"/><circle cx="208.9" cy="954.3" r="1.21" opacity="0.42"/><circle cx="1448.0" cy="106.9" r="1.35" opacity="0.43"/><circle cx="1339.2" cy="197.2" r="1.17" opacity="0.33"/><circle cx="1013.2" cy="306.1" r="0.96" opacity="0.49"/><circle cx="547.6" cy="705.4" r="0.90" opacity="0.77"/><circle cx="878.5" cy="385.2" r="0.95" opacity="0.51"/><circle cx="589.3" cy="631.6" r="0.62" opacity="0.53"/><circle cx="1400.2" cy="222.4" r="1.20" opacity="0.82"/><circle cx="1385.1" cy="142.4" r="0.56" opacity="0.33"/><circle cx="139.5" cy="849.9" r="0.94" opacity="0.75"/><circle cx="524.9" cy="733.3" r="1.16" opacity="0.34"/><circle cx="15.4" cy="990.0" r="1.30" opacity="0.61"/><circle cx="270.3" cy="807.6" r="1.16" opacity="0.24"/><circle cx="1558.2" cy="16.2" r="1.07" opacity="0.24"/><circle cx="258.2" cy="796.8" r="1.05" opacity="0.78"/><circle cx="62.1" cy="990.0" r="0.99" opacity="0.69"/><circle cx="1503.6" cy="63.7" r="2.10" opacity="0.24"/><circle cx="917.1" cy="414.6" r="0.76" opacity="0.72"/><circle cx="1419.7" cy="171.0" r="0.95" opacity="0.80"/><circle cx="544.2" cy="604.7" r="0.77" opacity="0.41"/><circle cx="394.4" cy="703.0" r="0.66" opacity="0.72"/><circle cx="883.1" cy="525.3" r="0.99" opacity="0.55"/><circle cx="367.4" cy="798.8" r="1.12" opacity="0.77"/><circle cx="492.2" cy="726.6" r="1.28" opacity="0.39"/><circle cx="1566.5" cy="10.0" r="1.15" opacity="0.49"/><circle cx="797.5" cy="591.9" r="0.82" opacity="0.60"/><circle cx="1307.4" cy="224.2" r="0.86" opacity="0.39"/><circle cx="258.3" cy="757.6" r="1.01" opacity="0.62"/></g>
+    <g class="voyage-constellation">
+      <path d="M142 174l2.3 8 8 2.3-8 2.3-2.3 8-2.3-8-8-2.3 8-2.3z"/>
+      <path d="M1438 406l3 10 10 3-10 3-3 10-3-10-10-3 10-3z"/>
+      <path d="M1216 92l2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/>
+    </g>
+  </svg>
+  <div class="voyage-horizon">
+    <svg class="voyage-golden-sea" viewBox="0 0 1600 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+      <defs>
+        <linearGradient id="voyage-wave-line"><stop stop-color="#d9ae54" stop-opacity=".08"/><stop offset=".2" stop-color="#f1ce80"/><stop offset=".55" stop-color="#c59539" stop-opacity=".25"/><stop offset=".85" stop-color="#f1ce80"/><stop offset="1" stop-color="#d9ae54" stop-opacity=".08"/></linearGradient>
+        <linearGradient id="voyage-wave-fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dbb55f" stop-opacity=".18"/><stop offset="1" stop-color="#dbb55f" stop-opacity=".01"/></linearGradient>
+      </defs>
+      <g class="voyage-tide-back" fill="none" stroke="url(#voyage-wave-line)" stroke-width="1.3">
+        <path class="voyage-tide-body" d="M-100 158C220 58 510 76 820 154S1370 218 1700 132V340H-100Z" fill="url(#voyage-wave-fill)" stroke="none"/>
+        <path d="M-100 158C220 58 510 76 820 154S1370 218 1700 132"/>
+        <path d="M-100 176C220 76 510 94 820 172S1370 236 1700 150" opacity=".45"/>
+      </g>
+      <g class="voyage-tide-front">
+        <path d="M-100 222C80 188 140 160 320 192S640 266 850 218S1140 152 1350 198S1570 252 1700 214V320H-100Z" fill="url(#voyage-wave-fill)"/>
+        <path d="M-100 222C80 188 140 160 320 192S640 266 850 218S1140 152 1350 198S1570 252 1700 214" fill="none" stroke="url(#voyage-wave-line)" stroke-width="1.8"/>
+        <path d="M-100 239C80 205 140 177 320 209S640 283 850 235S1140 169 1350 215S1570 269 1700 231" fill="none" stroke="url(#voyage-wave-line)" stroke-width=".8" opacity=".5"/>
+      </g>
+    </svg>
+  </div>
+</div>
+<!-- VOYAGE ATMOSPHERE MARKUP END -->
+
 
 <div class="stars-bg"></div>
 <div class="shooting-star ss1"></div>
@@ -814,10 +1399,7 @@ body {
 
 <!-- ═══ 히어로 ═══ -->
 <div class="hero">
-  <div class="ocean">
-    <div class="wave"></div>
-    <div class="wave"></div>
-  </div>
+  <!-- The two golden wave layers now share the fixed voyage-horizon. -->
   <div class="hero-compass">✦</div>
   <h1 class="hero-title">A ERA DOS<br>DESCOBRIMENTOS</h1>
   <p class="hero-sub">The Age of Discovery — 1498</p>
@@ -830,7 +1412,7 @@ body {
   <div class="hero-divider"></div>
   <div class="hero-info">
     <span class="hero-badge">⛵ 교역 시뮬레이션</span>
-    <span class="hero-badge">💕 로맨스 7인</span>
+    <span class="hero-badge">💕 로맨스 6인</span>
     <span class="hero-badge">🎲 랜덤 이벤트</span>
     <span class="hero-badge">🗺️ 8개 항구</span>
   </div>
@@ -859,105 +1441,40 @@ body {
 </div>
 
 <!-- ═══ 캐릭터 ═══ -->
-<div class="section">
+<div class="section" id="characters">
   <div class="section-label">✦ Characters</div>
-  <h2 class="section-title">바다 <span class="gold">위의</span> 사람들</h2>
+  <h2 class="section-title">등장인물 <span class="gold">소개</span></h2>
   <div class="section-divider"></div>
-  <div class="char-grid">
-
-    <div class="char-card">
-      <div class="char-portrait"><span class="char-initial">E</span></div>
-      <div class="char-info">
-        <div class="char-role">Navigator</div>
-        <div class="char-name">Estêvão Lopes <span style="font-size:10px">💕</span></div>
-        <div class="char-name-kr">에스테방 로페스 · 항해사 · 30대 중반</div>
-        <div class="char-quote">"…별이 예쁜 밤이군요. 아, 아무것도 아닙니다, 선장."</div>
-        <span class="char-tag">과묵</span><span class="char-tag">슬로우번</span><span class="char-tag">트라우마</span>
+  <p class="character-intro-kicker">바다 위의 사람들</p>
+  <div class="gallery-wrap">
+    <div class="char-tabs" id="charTabs" role="group" aria-label="등장인물 선택"></div>
+    <div class="character-feature" id="characterFeature">
+      <div class="character-profile">
+        <div class="character-summary-role" id="charSummaryRole">Navigator</div>
+        <div class="char-header" id="charHeader">
+          <span class="char-header-icon" id="charIcon">🧭</span>
+          <div>
+            <div class="char-header-name" id="charName">에스테방 로페스</div>
+            <div class="char-header-orig" id="charOrig">Estêvão Lopes</div>
+            <div class="char-header-role" id="charRole">항해사 · 35세 · 공략 가능</div>
+          </div>
+        </div>
+        <blockquote class="char-header-quote" id="charQuote">&quot;…별이 예쁜 밤이군요. 아, 아무것도 아닙니다, 선장.&quot;</blockquote>
+        <div class="character-tags" id="charTags"><span class="char-tag">과묵</span><span class="char-tag">슬로우번</span><span class="char-tag">트라우마</span></div>
+        <div class="character-appearance-title">외모와 차림</div>
+        <div class="char-header-desc" id="charDesc">183cm. 바닷바람에 거칠어진 짧은 흑갈색 머리, 깊고 어두운 갈색 눈동자. 구릿빛 피부, 각진 턱선, 왼쪽 관자놀이~귀 뒤의 화상 흉터. 마른 듯 단단한 체구, 길고 마디 굵은 손. 낡았지만 깨끗한 린넨 셔츠에 짙은 갈색 저킨.</div>
+      </div>
+      <div class="character-gallery-pane">
+        <div class="char-viewer">
+          <div class="char-track" id="charTrack" tabindex="0" aria-label="캐릭터 이미지 갤러리"></div>
+          <button type="button" class="char-nav char-nav-prev" aria-label="이전 이미지" onclick="charImgMove(-1)">&lt;</button>
+          <button type="button" class="char-nav char-nav-next" aria-label="다음 이미지" onclick="charImgMove(1)">&gt;</button>
+        </div>
+        <div class="char-dots" id="charDots"></div>
+        <div class="char-counter" id="charCounter" aria-live="polite">1 / 3</div>
+        <p class="gallery-status" id="charImageStatus" role="status"></p>
       </div>
     </div>
-
-    <div class="char-card">
-      <div class="char-portrait"><span class="char-initial">I</span></div>
-      <div class="char-info">
-        <div class="char-role">Ship's Doctor</div>
-        <div class="char-name">Inês de Cruz <span style="font-size:10px">💕</span></div>
-        <div class="char-name-kr">이네스 드 크루즈 · 선의(남장) · 20대 후반</div>
-        <div class="char-quote">"죽을 거면 내 앞에서 죽어. 다른 데서 죽으면 귀찮아지니까."</div>
-        <span class="char-tag">독설가</span><span class="char-tag">비밀</span><span class="char-tag">섬세</span>
-      </div>
-    </div>
-
-    <div class="char-card">
-      <div class="char-portrait"><span class="char-initial">A</span></div>
-      <div class="char-info">
-        <div class="char-role">Interpreter & Merchant</div>
-        <div class="char-name">Ali ibn Yusuf <span style="font-size:10px">💕</span></div>
-        <div class="char-name-kr">알리 이븐 유세프 · 통역/중개상 · 30대 초반</div>
-        <div class="char-quote">"내 심장은 비매품이야. …근데 당신이라면 할부는 가능할지도?"</div>
-        <span class="char-tag">능글</span><span class="char-tag">밀당</span><span class="char-tag">다문화</span>
-      </div>
-    </div>
-
-    <div class="char-card">
-      <div class="char-portrait"><span class="char-initial">D</span></div>
-      <div class="char-info">
-        <div class="char-role">Rival Captain</div>
-        <div class="char-name">Diogo de Melo <span style="font-size:10px">💕</span></div>
-        <div class="char-name-kr">디오구 드 멜루 · 라이벌 선장 · 20대 후반</div>
-        <div class="char-quote">"또 만났군. 이번에도 내 뒤꽁무니만 쫓을 건가?"</div>
-        <span class="char-tag">츤데레</span><span class="char-tag">귀족</span><span class="char-tag">라이벌</span>
-      </div>
-    </div>
-
-    <div class="char-card">
-      <div class="char-portrait"><span class="char-initial">L</span></div>
-      <div class="char-info">
-        <div class="char-role">Informant</div>
-        <div class="char-name">Luísa da Silva <span style="font-size:10px">💕</span></div>
-        <div class="char-name-kr">루이사 다 실바 · 리스본 정보상 · 20대 초반</div>
-        <div class="char-quote">"…바람 방향이 바뀌었어. 오늘쯤 돌아올 수도 있겠다."</div>
-        <span class="char-tag">기다림</span><span class="char-tag">영리</span><span class="char-tag">항구의 사람</span>
-      </div>
-    </div>
-
-    <div class="char-card">
-      <div class="char-portrait"><span class="char-initial">S</span></div>
-      <div class="char-info">
-        <div class="char-role">Stowaway</div>
-        <div class="char-name">Sofia Margarida <span style="font-size:10px">💕</span></div>
-        <div class="char-name-kr">소피아 마르게리다 · 밀항자/견습 · 19세</div>
-        <div class="char-quote">"나도 바다가 보고 싶었어요! 리스본 골목밖에 모르는 인생은 싫단 말이에요!"</div>
-        <span class="char-tag">햇살</span><span class="char-tag">성장</span><span class="char-tag">순수</span>
-      </div>
-    </div>
-
-    <div class="char-card">
-      <div class="char-portrait"><span class="char-initial">T</span></div>
-      <div class="char-info">
-        <div class="char-role">Chaplain</div>
-        <div class="char-name">Tomás Aquina <span style="font-size:10px">💕</span></div>
-        <div class="char-name-kr">토마스 아퀴나 · 선상 사제 · 20대 중반</div>
-        <div class="char-quote">"신이 용서하시겠지만… 저는 제 자신을 용서할 수 없습니다."</div>
-        <span class="char-tag">금기</span><span class="char-tag">갈등</span><span class="char-tag">신앙</span>
-      </div>
-    </div>
-
-    <div class="char-card" style="border-color: rgba(100,140,200,0.15);">
-      <div class="char-portrait" style="border-color:rgba(100,140,200,0.2); background:linear-gradient(135deg, rgba(100,140,200,0.08), rgba(80,120,180,0.08));"><span class="char-initial" style="color:rgba(100,140,200,0.3);">M</span></div>
-      <div class="char-info">
-        <div class="char-role" style="color:#4a7a9a;">Boatswain (Non-romance)</div>
-        <div class="char-name">Marco Ferreira <span style="font-size:10px">🛡️</span></div>
-        <div class="char-name-kr">마르코 페레이라 · 갑판장 · 30대 중반 — 든든한 형 & 조력자</div>
-        <div class="char-quote">"걱정 마, 선장! 내가 뭘 때리든 부러지는 건 상대편이야."</div>
-        <span class="char-tag" style="color:#6a9aba; border-color:rgba(100,140,200,0.2);">전투</span>
-        <span class="char-tag" style="color:#6a9aba; border-color:rgba(100,140,200,0.2);">충성</span>
-        <span class="char-tag" style="color:#6a9aba; border-color:rgba(100,140,200,0.2);">연애 조언</span>
-      </div>
-    </div>
-
-  </div>
-  <div style="text-align:right; margin-top:10px; font-size:13px; color:#5a6a80; letter-spacing:0.5px;">
-    💕 공략 가능 &nbsp;&nbsp; 🛡️ 비공략 (조력자)
   </div>
 </div>
 
@@ -985,7 +1502,7 @@ body {
     <div class="sys-card">
       <div class="sys-icon">💕</div>
       <div class="sys-name">로맨스</div>
-      <div class="sys-desc">7명의 공략 캐릭터.<br>좁은 배 위에서 쌓이는 감정.<br>비밀, 밀당, 재회.</div>
+      <div class="sys-desc">6명의 공략 캐릭터.<br>좁은 배 위에서 쌓이는 감정.<br>비밀, 밀당, 재회.</div>
     </div>
     <div class="sys-card">
       <div class="sys-icon">📖</div>
@@ -1015,8 +1532,16 @@ body {
   <div class="section-label">✦ Ports</div>
   <h2 class="section-title">세계의 <span class="gold">항구</span></h2>
   <div class="section-divider"></div>
-  <div class="routes">
+  <div class="routes port-scenes">
     <div class="route">
+      <figure class="scene-gallery" data-scene-gallery="lisbon" role="group" aria-label="리스본 배경 갤러리" tabindex="0">
+        <div class="scene-viewport"><div class="scene-track">
+          <div class="scene-slide" role="group" aria-label="1 / 3" aria-hidden="false"><img class="scene-image" src="images/ports/lisbon.png" alt="리스본 풍경 1" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="2 / 3" aria-hidden="true"><img class="scene-image" src="images/ports/lisbon-2.png" alt="리스본 풍경 2" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="3 / 3" aria-hidden="true"><img class="scene-image" src="images/ports/lisbon-3.png" alt="리스본 풍경 3" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+        </div></div>
+        <div class="scene-controls"><button class="scene-previous" type="button" aria-label="리스본 이전 이미지" disabled>&lt;</button><span class="scene-counter" aria-live="polite">1 / 3</span><button class="scene-next" type="button" aria-label="리스본 다음 이미지">&gt;</button></div>
+      </figure>
       <span class="route-icon">⚓</span>
       <div>
         <div class="route-name">리스본 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Lisboa</span></div>
@@ -1025,6 +1550,13 @@ body {
       <div class="route-goods">와인 · 총기 · 모직물</div>
     </div>
     <div class="route">
+      <figure class="scene-gallery" data-scene-gallery="seville" role="group" aria-label="세비야 배경 갤러리" tabindex="0">
+        <div class="scene-viewport"><div class="scene-track">
+          <div class="scene-slide" role="group" aria-label="1 / 2" aria-hidden="false"><img class="scene-image" src="images/ports/seville.png" alt="세비야 풍경 1" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="2 / 2" aria-hidden="true"><img class="scene-image" src="images/ports/seville-2.png" alt="세비야 풍경 2" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+        </div></div>
+        <div class="scene-controls"><button class="scene-previous" type="button" aria-label="세비야 이전 이미지" disabled>&lt;</button><span class="scene-counter" aria-live="polite">1 / 2</span><button class="scene-next" type="button" aria-label="세비야 다음 이미지">&gt;</button></div>
+      </figure>
       <span class="route-icon">🏰</span>
       <div>
         <div class="route-name">세비야 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Sevilla</span></div>
@@ -1033,6 +1565,14 @@ body {
       <div class="route-goods">올리브유 · 철광석</div>
     </div>
     <div class="route">
+      <figure class="scene-gallery" data-scene-gallery="ceuta" role="group" aria-label="세우타 배경 갤러리" tabindex="0">
+        <div class="scene-viewport"><div class="scene-track">
+          <div class="scene-slide" role="group" aria-label="1 / 3" aria-hidden="false"><img class="scene-image" src="images/ports/ceuta.png" alt="세우타 풍경 1" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="2 / 3" aria-hidden="true"><img class="scene-image" src="images/ports/ceuta-2.png" alt="세우타 풍경 2" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="3 / 3" aria-hidden="true"><img class="scene-image" src="images/ports/ceuta-3.png" alt="세우타 풍경 3" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+        </div></div>
+        <div class="scene-controls"><button class="scene-previous" type="button" aria-label="세우타 이전 이미지" disabled>&lt;</button><span class="scene-counter" aria-live="polite">1 / 3</span><button class="scene-next" type="button" aria-label="세우타 다음 이미지">&gt;</button></div>
+      </figure>
       <span class="route-icon">🕌</span>
       <div>
         <div class="route-name">세우타 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Ceuta</span></div>
@@ -1041,6 +1581,12 @@ body {
       <div class="route-goods">양탄자 · 가죽 · 향수</div>
     </div>
     <div class="route">
+      <figure class="scene-gallery" data-scene-gallery="accra" role="group" aria-label="아크라 배경 갤러리" tabindex="0">
+        <div class="scene-viewport"><div class="scene-track">
+          <div class="scene-slide" role="group" aria-label="1 / 1" aria-hidden="false"><img class="scene-image" src="images/ports/accra.png" alt="아크라 풍경 1" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+        </div></div>
+        <div class="scene-controls"><button class="scene-previous" type="button" aria-label="아크라 이전 이미지" disabled>&lt;</button><span class="scene-counter" aria-live="polite">1 / 1</span><button class="scene-next" type="button" aria-label="아크라 다음 이미지" disabled>&gt;</button></div>
+      </figure>
       <span class="route-icon">✨</span>
       <div>
         <div class="route-name">아크라 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Accra</span></div>
@@ -1049,6 +1595,14 @@ body {
       <div class="route-goods">금 · 상아</div>
     </div>
     <div class="route">
+      <figure class="scene-gallery" data-scene-gallery="calicut" role="group" aria-label="캘리컷 배경 갤러리" tabindex="0">
+        <div class="scene-viewport"><div class="scene-track">
+          <div class="scene-slide" role="group" aria-label="1 / 3" aria-hidden="false"><img class="scene-image" src="images/ports/calicut.png" alt="캘리컷 풍경 1" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="2 / 3" aria-hidden="true"><img class="scene-image" src="images/ports/calicut-3.png" alt="캘리컷 풍경 2" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="3 / 3" aria-hidden="true"><img class="scene-image" src="images/ports/calicut-4.png" alt="캘리컷 풍경 3" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+        </div></div>
+        <div class="scene-controls"><button class="scene-previous" type="button" aria-label="캘리컷 이전 이미지" disabled>&lt;</button><span class="scene-counter" aria-live="polite">1 / 3</span><button class="scene-next" type="button" aria-label="캘리컷 다음 이미지">&gt;</button></div>
+      </figure>
       <span class="route-icon">🌶️</span>
       <div>
         <div class="route-name">캘리컷 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Calicut</span></div>
@@ -1057,12 +1611,29 @@ body {
       <div class="route-goods">후추 · 비단 · 보석</div>
     </div>
     <div class="route">
+      <figure class="scene-gallery" data-scene-gallery="malacca" role="group" aria-label="말라카 배경 갤러리" tabindex="0">
+        <div class="scene-viewport"><div class="scene-track">
+          <div class="scene-slide" role="group" aria-label="1 / 2" aria-hidden="false"><img class="scene-image" src="images/ports/malacca.png" alt="말라카 풍경 1" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="2 / 2" aria-hidden="true"><img class="scene-image" src="images/ports/malacca-2.png" alt="말라카 풍경 2" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+        </div></div>
+        <div class="scene-controls"><button class="scene-previous" type="button" aria-label="말라카 이전 이미지" disabled>&lt;</button><span class="scene-counter" aria-live="polite">1 / 2</span><button class="scene-next" type="button" aria-label="말라카 다음 이미지">&gt;</button></div>
+      </figure>
       <span class="route-icon">🏝️</span>
       <div>
         <div class="route-name">말라카 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Malacca</span></div>
         <div class="route-desc">동남아 — 세계의 끝</div>
       </div>
       <div class="route-goods">정향 · 육두구 · 도자기</div>
+    </div>
+    <div class="route">
+      <figure class="scene-gallery" data-scene-gallery="mozambique" role="group" aria-label="모잠비크 배경 갤러리" tabindex="0">
+        <div class="scene-viewport"><div class="scene-track">
+          <div class="scene-slide" role="group" aria-label="1 / 2" aria-hidden="false"><img class="scene-image" src="images/ports/mozambique.png" alt="모잠비크 풍경 1" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="2 / 2" aria-hidden="true"><img class="scene-image" src="images/ports/mozambique-3.png" alt="모잠비크 풍경 2" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+        </div></div>
+        <div class="scene-controls"><button class="scene-previous" type="button" aria-label="모잠비크 이전 이미지" disabled>&lt;</button><span class="scene-counter" aria-live="polite">1 / 2</span><button class="scene-next" type="button" aria-label="모잠비크 다음 이미지">&gt;</button></div>
+      </figure>
+      <span class="route-icon">🏝️</span><div><div class="route-name">모잠비크 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Mozambique</span></div><div class="route-desc">동아프리카 해안 · 중간 기착지</div></div><div class="route-goods">금 · 향목</div>
     </div>
   </div>
 </div>
@@ -1120,8 +1691,23 @@ body {
   <div class="guide-desc" style="margin-bottom:20px;">
     전투와 교역만이 전부가 아니다. 배 위에서의 일상이 이야기를 만든다.
   </div>
+  <div class="life-scenes"><figure class="scene-gallery" data-scene-gallery="life" role="group" aria-label="선상과 바다 배경 갤러리" tabindex="0">
+        <div class="scene-viewport"><div class="scene-track">
+          <div class="scene-slide" role="group" aria-label="1 / 10" aria-hidden="false"><img class="scene-image" src="images/scenes/vento-fortuna.png" alt="Vento Fortuna" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="2 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/main-deck.png" alt="주갑판 1" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="3 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/main-deck-3.png" alt="주갑판 2" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="4 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/night-deck.png" alt="갑판 야경" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="5 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/night-sky.png" alt="밤하늘" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="6 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/captains-cabin.png" alt="선장실" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="7 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/cargo-hold.png" alt="화물칸" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="8 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/calm-sea.png" alt="고요한 바다" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="9 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/stormy-sea.png" alt="폭풍우 바다" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+          <div class="scene-slide" role="group" aria-label="10 / 10" aria-hidden="true"><img class="scene-image" src="images/scenes/pirate-encounter.png" alt="해적 조우" width="1216" height="832" loading="lazy" decoding="async" draggable="false"><p class="scene-status" role="status"></p></div>
+        </div></div>
+        <div class="scene-controls"><button class="scene-previous" type="button" aria-label="선상과 바다 이전 이미지" disabled>&lt;</button><span class="scene-counter" aria-live="polite">1 / 10</span><button class="scene-next" type="button" aria-label="선상과 바다 다음 이미지">&gt;</button></div>
+      </figure></div>
 
-  <div style="display:flex; flex-direction:column; gap:14px;">
+  <div class="life-card-grid">
     <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
       <span style="font-size:28px; flex-shrink:0;">📖</span>
       <div style="flex-grow:1;">
@@ -1339,7 +1925,7 @@ body {
               <strong>루이사</strong> → 리스본 귀항 시 재회, 정보로 목숨을 구해줄 때<br>
               <strong>디오구</strong> → 교역 대결, 위기에서 서로 구하기<br>
               <strong>소피아</strong> → 가르침과 성장, 한 사람의 항해사로 인정<br>
-              <strong>토마스</strong> → 고해 장면, 폭풍 중 기도, 서원과 감정의 충돌
+              <strong>토마스 · 비공략 조력자</strong> → 고해와 연애 상담, 와인 소동, 폭풍 속 기도와 날씨 예감
             </span>
           </div>
         </div>
@@ -1440,7 +2026,7 @@ body {
     돈을 모아 더 큰 배로 업그레이드할 수 있다. 리스본 조선소에서 구매·교환한다.
   </div>
 
-  <div style="display:flex; flex-direction:column; gap:10px;">
+  <div class="ship-card-grid">
     <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
       <span style="font-size:28px;">⛵</span>
       <div style="flex-grow:1;">
@@ -1549,22 +2135,6 @@ body {
         <strong>예상 수익: 턴당 200~500골드 (생존 시)</strong>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- ═══ VN 모드 팁 ═══ -->
-<div class="section">
-  <div class="section-label">✦ VN Mode</div>
-  <h2 class="section-title">비주얼노벨 <span class="gold">모드</span></h2>
-  <div class="section-divider"></div>
-  <div class="guide-desc">
-    이 봇은 <strong>VN 모드 확장</strong>과 함께 사용할 수 있다.<br>
-    VN 모드를 켜면 텍스트가 비주얼노벨처럼 한 줄씩 나온다.<br><br>
-    <strong>켜는 법:</strong> 화면의 📖 버튼 클릭<br>
-    <strong>진행:</strong> 화면 아무 곳이나 클릭하면 다음 문장<br>
-    <strong>스킵:</strong> SKIP 버튼으로 빠르게 넘기기<br>
-    <strong>BGM:</strong> 분위기에 맞는 음악을 직접 추가 가능<br><br>
-    <span style="color:#5a6a80; font-size:12px;">* VN 모드 없이도 정상 플레이 가능하다</span>
   </div>
 </div>
 
@@ -1899,8 +2469,13 @@ body {
     <!-- 3선박 비교 실루엣 -->
     <div class="map-svg-box" style="margin-top:20px;">
 <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
-  <rect x="0" y="195" width="900" height="65" fill="url(#waterGrad)"/>
-  <path d="M0,197 Q50,191 100,197 Q150,203 200,197 Q250,191 300,197 Q350,203 400,197 Q450,191 500,197 Q550,203 600,197 Q650,191 700,197 Q750,203 800,197 Q850,191 900,197" fill="none" stroke="rgba(80,140,200,0.12)" stroke-width="1"/>
+  <!-- VOYAGE COMPARISON WATER START -->
+  <defs><clipPath id="voyage-comparison-water-clip"><rect x="0" y="180" width="900" height="80"/></clipPath></defs>
+  <g class="voyage-comparison-water" clip-path="url(#voyage-comparison-water-clip)" aria-hidden="true">
+    <path class="voyage-comparison-water-wave voyage-comparison-water-back" d="M-720,195 Q-630,185 -540,195 Q-450,205 -360,195 Q-270,185 -180,195 Q-90,205 0,195 Q90,185 180,195 Q270,205 360,195 Q450,185 540,195 Q630,205 720,195 Q810,185 900,195 Q990,205 1080,195 Q1170,185 1260,195 Q1350,205 1440,195 L1440,280 L-720,280 Z" fill="url(#waterGrad)" opacity="0.55" stroke="rgba(80,140,200,0.26)" stroke-width="1"/>
+    <path class="voyage-comparison-water-wave voyage-comparison-water-front" d="M-240,198 Q-180,184 -120,198 Q-60,212 0,198 Q60,184 120,198 Q180,212 240,198 Q300,184 360,198 Q420,212 480,198 Q540,184 600,198 Q660,212 720,198 Q780,184 840,198 Q900,212 960,198 Q1020,184 1080,198 Q1140,212 1200,198 Q1260,184 1320,198 Q1380,212 1440,198 L1440,280 L-240,280 Z" fill="url(#waterGrad)" opacity="0.85" stroke="rgba(80,140,200,0.4)" stroke-width="1.2"/>
+  </g>
+  <!-- VOYAGE COMPARISON WATER END -->
 
   <!-- 카라벨 -->
   <g transform="translate(80,0)">
@@ -1989,5 +2564,391 @@ document.querySelectorAll('.char-portrait').forEach(portrait => {
   <div class="footer-credit">A ERA DOS DESCOBRIMENTOS · SillyTavern Bot</div>
 </div>
 
+<script id="voyage-character-gallery">
+
+(function(){
+  const CHARACTERS = [
+  {
+    "id": "estevao",
+    "name": "에스테방 로페스",
+    "orig": "Estêvão Lopes",
+    "role": "항해사 · 35세 · 공략 가능",
+    "icon": "🧭",
+    "quote": "\"별이 예쁜 밤이군요.\"",
+    "desc": "183cm. 바닷바람에 거칠어진 짧은 흑갈색 머리, 깊고 어두운 갈색 눈동자. 구릿빛 피부, 각진 턱선, 왼쪽 관자놀이~귀 뒤의 화상 흉터. 마른 듯 단단한 체구, 길고 마디 굵은 손. 낡았지만 깨끗한 린넨 셔츠에 짙은 갈색 저킨.",
+    "images": [
+      "estevao_1.png",
+      "estevao_2.png",
+      "estevao_3.png"
+    ],
+    "summaryRole": "Navigator",
+    "summaryQuote": "\"…별이 예쁜 밤이군요. 아, 아무것도 아닙니다, 선장.\"",
+    "tags": [
+      "과묵",
+      "슬로우번",
+      "트라우마"
+    ]
+  },
+  {
+    "id": "ines",
+    "name": "이네스 드 크루즈",
+    "orig": "Inês de Cruz",
+    "role": "선의(의사) · 28세 · 남장 중 · 공략 가능",
+    "icon": "⚕️",
+    "quote": "\"죽을 거면 내 앞에서 죽어.\"",
+    "desc": "170cm. 짧게 자른 어두운 밤색 머리, 날카로운 흑갈색 눈동자. 섬세하지만 각진 턱, 얇은 입술. 가슴을 압박 붕대로 감추고 헐렁한 옷으로 가림. 큼직한 린넨 셔츠에 갈색 가죽 앞치마, 약초·수술 도구 가방.",
+    "images": [
+      "ines_1.png",
+      "ines_3.png",
+      "ines_2.png"
+    ],
+    "summaryRole": "Ship's Doctor",
+    "summaryQuote": "\"죽을 거면 내 앞에서 죽어. 다른 데서 죽으면 귀찮아지니까.\"",
+    "tags": [
+      "독설가",
+      "비밀",
+      "섬세"
+    ]
+  },
+  {
+    "id": "ali",
+    "name": "알리 이븐 유세프",
+    "orig": "Ali ibn Yusuf",
+    "role": "통역 · 중개상 · 32세 · 공략 가능",
+    "icon": "🕌",
+    "quote": "\"내 심장은 비매품이야.\"",
+    "desc": "178cm. 곱슬기 있는 검은 머리를 느슨하게 묶어 넘김. 꿀색 밝은 갈색 눈, 정갈한 콧수염과 짧은 턱수염. 웃으면 눈이 초승달. 유연하고 날렵한 체구. 아랍식 튜닉과 유럽식 저킨 혼합 스타일, 은 목걸이(어머니 유품).",
+    "images": [
+      "ali_1.png",
+      "ali_2.png",
+      "ali_3.png"
+    ],
+    "summaryRole": "Interpreter & Merchant",
+    "summaryQuote": "\"내 심장은 비매품이야. …근데 당신이라면 할부는 가능할지도?\"",
+    "tags": [
+      "능글",
+      "밀당",
+      "다문화"
+    ]
+  },
+  {
+    "id": "marco",
+    "name": "마르코 페레이라",
+    "orig": "Marco Ferreira",
+    "role": "갑판장 · 36세 · 비공략",
+    "icon": "⚓",
+    "quote": "\"걱정 마, 선장!\"",
+    "desc": "191cm. 짧게 밀어붙인 갈색 머리, 짙은 녹갈색 눈. 한번 부러져 옆으로 휜 코, 넓은 턱. 큰 골격에 두꺼운 근육, 닻을 혼자 끌어올리는 괴력. 소매 뜯은 린넨 셔츠, 밧줄 장갑.",
+    "images": [],
+    "summaryRole": "Boatswain (Non-romance)",
+    "summaryQuote": "\"걱정 마, 선장! 내가 뭘 때리든 부러지는 건 상대편이야.\"",
+    "tags": [
+      "전투",
+      "충성",
+      "연애 조언"
+    ]
+  },
+  {
+    "id": "tomas",
+    "name": "토마스 아퀴나",
+    "orig": "Tomás Aquina",
+    "role": "선상 사제 · 53세 · 비공략",
+    "icon": "✝️",
+    "quote": "\"와인 좀 마시고 생각해보자꾸나.\"",
+    "desc": "168cm. 벗어진 정수리를 두건으로 가린 회백발, 실눈의 흐릿한 갈색 눈. 둥글넓적한 인상 좋은 얼굴, 항상 붉은 코끝(와인 탓). 배가 나온 둥근 체형. 낡은 검은 수도복에 와인 얼룩, 나무 묵주.",
+    "images": [],
+    "summaryRole": "Chaplain",
+    "summaryQuote": "\"주님께서 말씀하시길… 아, 잠깐 그건 와인 좀 마시고 생각해보자꾸나.\"",
+    "tags": [
+      "노사제",
+      "와인 소동",
+      "비공략 조력자"
+    ]
+  },
+  {
+    "id": "luisa",
+    "name": "루이사 다 실바",
+    "orig": "Luísa da Silva",
+    "role": "리스본 정보상 · 22세 · 공략 가능",
+    "icon": "🔮",
+    "quote": "\"바람 방향이 바뀌었어.\"",
+    "desc": "162cm. 물결치는 짙은 갈색 머리를 반쯤 올려 묶음. 검은 올리브 같은 깊은 갈색 눈 — 고요하고 관찰적. 작고 단정한 얼굴, 표정 변화가 적음. 소박한 면 원피스에 린넨 앞치마, 귀 뒤에 마른 꽃.",
+    "images": [
+      "luisa_1.png",
+      "luisa_2.png",
+      "luisa_3.png"
+    ],
+    "summaryRole": "Informant",
+    "summaryQuote": "\"…바람 방향이 바뀌었어. 오늘쯤 돌아올 수도 있겠다.\"",
+    "tags": [
+      "기다림",
+      "영리",
+      "항구의 사람"
+    ]
+  },
+  {
+    "id": "diogo",
+    "name": "디오구 드 멜루",
+    "orig": "Diogo de Melo",
+    "role": "라이벌 선장 · 27세 · 공략 가능",
+    "icon": "⚔️",
+    "quote": "\"또 만났군.\"",
+    "desc": "180cm. 단정하게 빗어 넘긴 밝은 갈색 머리, 차갑고 투명한 청회색 눈. 귀족 특유의 섬세한 이목구비, 높은 코, 날카로운 턱선. 펜싱으로 다져진 날렵한 근육. 비단·벨벳 고급 항해 코트, 금실 자수 장갑, 세공 레이피어.",
+    "images": [
+      "diogo_1.png",
+      "diogo_2.png",
+      "diogo_3.png"
+    ],
+    "summaryRole": "Rival Captain",
+    "summaryQuote": "\"또 만났군. 이번에도 내 뒤꽁무니만 쫓을 건가?\"",
+    "tags": [
+      "츤데레",
+      "귀족",
+      "라이벌"
+    ]
+  },
+  {
+    "id": "sofia",
+    "name": "소피아 마르게리다",
+    "orig": "Sofia Margarida",
+    "role": "밀항자 · 견습 · 19세 · 공략 가능",
+    "icon": "🌊",
+    "quote": "\"나도 바다가 보고 싶었어요! 리스본 골목밖에 모르는 인생은 싫단 말이에요!\"",
+    "desc": "158cm. 집시/로마니풍 소녀 — 곱슬곱슬한 검은 머리에 색색의 리본, 올리브빛 피부, 크고 어두운 눈동자. 금 귀걸이 하나, 볼에 주근깨, 밝은 미소. 화려한 레이어드 치마에 오프숄더 블라우스, 맨발.",
+    "images": [
+      "sofia_2.png",
+      "sofia_1.png",
+      "sofia_3.png"
+    ],
+    "summaryRole": "Stowaway",
+    "summaryQuote": "\"나도 바다가 보고 싶었어요! 리스본 골목밖에 모르는 인생은 싫단 말이에요!\"",
+    "tags": [
+      "햇살",
+      "성장",
+      "순수"
+    ]
+  }
+];
+  const IMG_DIR = 'images/';
+  let currentChar = 0;
+  let currentImg = 0;
+  let scrollTimer;
+  let imageStates = [];
+  const tabsEl = document.getElementById('charTabs');
+  const trackEl = document.getElementById('charTrack');
+  const dotsEl = document.getElementById('charDots');
+  const counterEl = document.getElementById('charCounter');
+  const statusEl = document.getElementById('charImageStatus');
+  const prevEl = document.querySelector('.char-nav-prev');
+  const nextEl = document.querySelector('.char-nav-next');
+  const viewerEl = document.querySelector('.char-viewer');
+  const tabButtons = [];
+  for (const support of [false, true]) {
+    const group = document.createElement('div');
+    group.className = 'char-tab-group' + (support ? ' char-tab-group-support' : '');
+    group.setAttribute('role', 'group');
+    group.setAttribute('aria-label', support ? '비공략 조력자' : '공략 가능 인물');
+    CHARACTERS.forEach((c, i) => {
+      if ((c.images.length === 0) !== support) return;
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'char-tab' + (support ? ' char-tab-support' : '');
+      tab.textContent = c.orig;
+      tab.setAttribute('data-character-id', c.id);
+      tab.onclick = () => selectChar(i);
+      tabButtons[i] = tab;
+      group.appendChild(tab);
+    });
+    tabsEl.appendChild(group);
+  }
+  function selectChar(idx) {
+    clearTimeout(scrollTimer);
+    currentChar = idx;
+    currentImg = 0;
+    const c = CHARACTERS[idx];
+    imageStates = c.images.map(() => 'loading');
+    tabButtons.forEach((t, i) => {
+      t.classList.toggle('active', i === idx);
+      t.setAttribute('aria-pressed', String(i === idx));
+    });
+    for (const [id, value] of [['charIcon', c.icon], ['charName', c.name], ['charOrig', c.orig], ['charRole', c.role], ['charQuote', c.summaryQuote], ['charDesc', c.desc], ['charSummaryRole', c.summaryRole]]) {
+      document.getElementById(id).textContent = value;
+    }
+    document.getElementById('charDesc').style.display = '';
+    document.getElementById('characterFeature').classList.toggle('is-support', c.images.length === 0);
+    const tagsEl = document.getElementById('charTags');
+    tagsEl.replaceChildren();
+    c.tags.forEach(text => {
+      const tag = document.createElement('span');
+      tag.className = 'char-tag';
+      tag.textContent = text;
+      tagsEl.appendChild(tag);
+    });
+    trackEl.replaceChildren();
+    dotsEl.replaceChildren();
+    c.images.forEach((file, fi) => {
+      const slide = document.createElement('div');
+      slide.className = 'char-img-slide';
+      const img = document.createElement('img');
+      img.alt = c.name + ' ' + (fi + 1);
+      img.style.display = 'none';
+      const ph = document.createElement('div');
+      ph.className = 'char-ph';
+      for (const [cls, text] of [['ph-icon', c.icon], ['ph-label', c.name + ' #' + (fi + 1)], ['ph-file', IMG_DIR + file]]) {
+        const span = document.createElement('span');
+        span.className = cls;
+        span.textContent = text;
+        ph.appendChild(span);
+      }
+      img.onload = () => {
+        img.style.display = 'block';
+        ph.style.display = 'none';
+        if (currentChar === idx) { imageStates[fi] = 'ready'; updateImgUI(); }
+      };
+      img.onerror = () => {
+        img.style.display = 'none';
+        ph.style.display = 'flex';
+        if (currentChar === idx) { imageStates[fi] = 'missing'; updateImgUI(); }
+      };
+      img.src = IMG_DIR + file;
+      slide.appendChild(img);
+      slide.appendChild(ph);
+      trackEl.appendChild(slide);
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'char-dot';
+      dot.setAttribute('aria-label', (fi + 1) + '번 이미지');
+      dot.onclick = () => goToImg(fi);
+      dotsEl.appendChild(dot);
+    });
+    trackEl.scrollLeft = 0;
+    updateImgUI();
+  }
+  function goToImg(idx) {
+    const total = CHARACTERS[currentChar].images.length;
+    if (!total) return;
+    currentImg = Math.max(0, Math.min(idx, total - 1));
+    trackEl.scrollTo({ left: currentImg * trackEl.clientWidth, behavior: 'smooth' });
+    updateImgUI();
+  }
+  function updateImgUI() {
+    const total = CHARACTERS[currentChar].images.length;
+    for (const element of [viewerEl, dotsEl, counterEl, statusEl]) {
+      element.style.display = total ? '' : 'none';
+    }
+    if (!total) {
+      currentImg = 0;
+      counterEl.textContent = '';
+      statusEl.textContent = '';
+      prevEl.disabled = true;
+      nextEl.disabled = true;
+      return;
+    }
+    dotsEl.querySelectorAll('.char-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === currentImg);
+      d.setAttribute('aria-current', String(i === currentImg));
+    });
+    counterEl.textContent = (currentImg + 1) + ' / ' + total;
+    prevEl.disabled = currentImg === 0;
+    nextEl.disabled = currentImg === total - 1;
+    statusEl.textContent = imageStates[currentImg] === 'ready' ? '' : imageStates[currentImg] === 'missing' ? '이미지 파일 준비 중입니다. 현재는 이미지 자리만 표시됩니다.' : '이미지를 확인하고 있습니다.';
+  }
+  window.charImgMove = dir => goToImg(currentImg + dir);
+  trackEl.addEventListener('keydown', event => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    window.charImgMove(event.key === 'ArrowLeft' ? -1 : 1);
+  });
+  trackEl.addEventListener('scroll', () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      if (!trackEl.clientWidth || !CHARACTERS[currentChar].images.length) return;
+      const last = CHARACTERS[currentChar].images.length - 1;
+      currentImg = Math.max(0, Math.min(last, Math.round(trackEl.scrollLeft / trackEl.clientWidth)));
+      updateImgUI();
+    }, 80);
+  });
+  selectChar(0);
+})();
+</script>
+<!-- VOYAGE SCENE GALLERY SCRIPT START -->
+<script id="voyage-scene-gallery">
+(function () {
+  'use strict';
+  document.querySelectorAll('[data-scene-gallery]').forEach(root => {
+    const track = root.querySelector('.scene-track');
+    if (!track) return;
+    const slides = Array.from(track.querySelectorAll('.scene-slide'));
+    if (!slides.length) return;
+    const counter = root.querySelector('.scene-counter');
+    const previous = root.querySelector('.scene-previous');
+    const next = root.querySelector('.scene-next');
+    let current = 0;
+    let scrollTimer;
+    function update() {
+      counter.textContent = (current + 1) + ' / ' + slides.length;
+      previous.disabled = current === 0;
+      next.disabled = current === slides.length - 1;
+      slides.forEach((slide, index) => slide.setAttribute('aria-hidden', String(index !== current)));
+    }
+    function move(delta) {
+      const target = Math.max(0, Math.min(slides.length - 1, current + delta));
+      if (target === current) return;
+      clearTimeout(scrollTimer);
+      current = target;
+      // CSS controls smooth/reduced motion, without device-specific branches.
+      track.scrollTo({ left: current * track.clientWidth });
+      update();
+    }
+    slides.forEach(slide => {
+      const img = slide.querySelector('.scene-image');
+      const status = slide.querySelector('.scene-status');
+      function ready() {
+        img.style.visibility = 'visible';
+        status.textContent = '';
+      }
+      function failed() {
+        img.style.visibility = 'hidden';
+        status.textContent = '이미지를 읽지 못했습니다. 다른 컷으로 넘겨주세요.';
+      }
+      img.style.visibility = 'hidden';
+      status.textContent = '이미지를 불러오고 있습니다.';
+      img.addEventListener('load', ready);
+      img.addEventListener('error', failed);
+      if (img.complete) { if (img.naturalWidth) ready(); else failed(); }
+    });
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    root.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      move(event.key === 'ArrowLeft' ? -1 : 1);
+    });
+    track.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        if (!track.clientWidth) return;
+        current = Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / track.clientWidth)));
+        update();
+      }, 120);
+    });
+    if (typeof ResizeObserver !== 'undefined') {
+      let width = track.clientWidth;
+      const observer = new ResizeObserver(() => {
+        if (!track.clientWidth || track.clientWidth === width) return;
+        width = track.clientWidth;
+        clearTimeout(scrollTimer);
+        const behavior = track.style.scrollBehavior;
+        track.style.scrollBehavior = 'auto';
+        track.scrollLeft = current * width;
+        track.style.scrollBehavior = behavior;
+      });
+      observer.observe(track);
+    }
+    update();
+  });
+}());
+</script>
+<!-- VOYAGE SCENE GALLERY SCRIPT END -->
 </body>
 </html>
