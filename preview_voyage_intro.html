@@ -1380,6 +1380,17 @@ OTHER DEALINGS IN THE FONT SOFTWARE. */
 }
 </style>
 <!-- VOYAGE CHOICE DEMO STYLE END -->
+<!-- VOYAGE SECTION TYPE START -->
+<style id="voyage-section-type-style">
+.section .sys-grid .sys-name { font-size: 18px; }
+.section .sys-grid .sys-desc { font-size: 16px; line-height: 1.85; }
+#voyage-choice-demo :is(.vcd-lead,.vcd-num,.vcd-text,.vcd-action,.vcd-draft,.vcd-notice) { font-size: 16px; }
+/* Override the older inline/detail sizes only inside the reputation list. */
+#voyage-reputation .reputation-levels > div > span:not(:first-child) { font-size: 16px !important; }
+#voyage-reputation .reputation-levels > div > span:nth-child(2) { flex: 0 0 5.5em; white-space: nowrap; }
+#voyage-reputation .reputation-levels > div > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+</style>
+<!-- VOYAGE SECTION TYPE END -->
 </head>
 <body>
 <!-- VOYAGE BGM MARKUP START -->
@@ -2478,7 +2489,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE. */
 </div>
 
 <!-- ═══ 명성 가이드 ═══ -->
-<div class="section">
+<div class="section" id="voyage-reputation">
   <div class="section-label">✦ Reputation</div>
   <h2 class="section-title">명성과 <span class="gold">칭호</span></h2>
   <div class="section-divider"></div>
@@ -2486,7 +2497,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE. */
     교역 이익, 전투 승리, 항로 발견, 업적으로 <strong>명성</strong>이 오른다.<br>
     명성이 쌓이면 <strong>칭호</strong>가 바뀌고, 왕실 의뢰나 특별 이벤트가 열린다.
   </div>
-  <div style="display:flex; flex-direction:column; gap:6px;">
+  <div class="reputation-levels" style="display:flex; flex-direction:column; gap:6px;">
     <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(15,22,38,0.3); border-radius:4px;">
       <span style="font-size:16px; width:24px; text-align:center;">🌑</span>
       <span style="font-size:13px; color:#5a6a80; width:60px;" data-voyage-copy="detail">0~50</span>
@@ -2880,7 +2891,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE. */
       <tbody>
         <tr><td class="sn">⛵ 카라벨</td><td>기본 보유</td><td>25~30</td><td>6~12</td><td>2~4</td><td><span class="stat-bar-sm" style="width:55px;background:rgba(100,200,150,0.6)"></span></td><td><span class="stat-bar-sm" style="width:18px"></span></td></tr>
         <tr><td class="sn">🚢 나오</td><td style="color:#c8a850">500G</td><td>50~60</td><td>15~25</td><td>6~10</td><td><span class="stat-bar-sm" style="width:35px;background:rgba(200,168,80,0.5)"></span></td><td><span class="stat-bar-sm" style="width:35px"></span></td></tr>
-        <tr><td class="sn">🏴‍☠️ 캐랙</td><td style="color:#e8c860;font-weight:600">1,200G</td><td>80~100</td><td>25~40</td><td>12~20</td><td><span class="stat-bar-sm" style="width:20px;background:rgba(180,100,100,0.5)"></span></td><td><span class="stat-bar-sm" style="width:55px;background:rgba(180,60,60,0.6)"></span></td></tr>
+        <tr><td class="sn">🏴‍☠️ 캐랙</td><td style="color:#c8a850">1,200G</td><td>80~100</td><td>25~40</td><td>12~20</td><td><span class="stat-bar-sm" style="width:20px;background:rgba(180,100,100,0.5)"></span></td><td><span class="stat-bar-sm" style="width:55px;background:rgba(180,60,60,0.6)"></span></td></tr>
       </tbody>
     </table>
 
