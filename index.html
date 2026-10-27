@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대항해시대 - 프리뷰 비교</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #080c18;
+  color: #d8d2c4;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+}
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 16px;
+  background: rgba(8, 12, 24, 0.94);
+  border-bottom: 1px solid rgba(200, 168, 80, 0.22);
+  backdrop-filter: blur(8px);
+}
+.title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+a {
+  color: #c8a850;
+  text-decoration: none;
+  font-size: 12px;
+  border: 1px solid rgba(200, 168, 80, 0.28);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: calc(100vh - 52px);
+}
+.pane {
+  min-width: 0;
+  border-right: 1px solid rgba(200, 168, 80, 0.18);
+  background: #080c18;
+}
+.pane:last-child { border-right: 0; }
+.pane-head {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 12px;
+  color: #8793aa;
+  background: #0d1324;
+  border-bottom: 1px solid rgba(200, 168, 80, 0.13);
+}
+iframe {
+  display: block;
+  width: 100%;
+  height: calc(100% - 34px);
+  border: 0;
+  background: #080c18;
+}
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .pane {
+    height: 80vh;
+    border-right: 0;
+    border-bottom: 1px solid rgba(200, 168, 80, 0.18);
+  }
+  .bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="title">대항해시대 프리뷰 비교</div>
+  <nav class="links">
+    <a href="./preview_voyage_game.html" target="_blank">작업 프리뷰만 열기</a>
+    <a href="./preview_voyage_intro.html" target="_blank">소개 프리뷰만 열기</a>
+  </nav>
+</header>
+<main class="grid">
+  <section class="pane">
+    <div class="pane-head">작업 프리뷰: 게임 상태창</div>
+    <iframe src="./preview_voyage_game.html"></iframe>
+  </section>
+  <section class="pane">
+    <div class="pane-head">기준 프리뷰: 소개 홈페이지</div>
+    <iframe src="./preview_voyage_intro.html"></iframe>
+  </section>
+</main>
+</body>
+</html>

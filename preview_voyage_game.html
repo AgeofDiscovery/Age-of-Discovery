@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대항해시대 - 게임 상태 프리뷰</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IM+Fell+English:ital@0;1&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  background: #080c18;
+  color: #c8d0e0;
+  font-family: 'Pretendard', sans-serif;
+  overflow-x: hidden;
+}
+
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 8% 15%, rgba(200,180,140,0.5), transparent),
+    radial-gradient(1px 1px at 22% 55%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 42% 8%, rgba(220,200,160,0.6), transparent),
+    radial-gradient(1px 1px at 65% 35%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1px 1px at 88% 72%, rgba(200,180,140,0.4), transparent),
+    radial-gradient(1px 1px at 12% 85%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 78% 12%, rgba(220,200,160,0.5), transparent),
+    radial-gradient(1px 1px at 55% 68%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1px 1px at 35% 92%, rgba(200,180,140,0.4), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 34px 18px 70px;
+}
+
+.section {
+  padding: 32px 0;
+}
+
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: #4a5a70;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: 'Cinzel', 'Pretendard', serif;
+  color: #ddd8c8;
+  font-size: 28px;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.gold { color: #c8a850; }
+
+.rule {
+  width: 50px;
+  height: 1px;
+  margin: 18px 0 28px;
+  background: linear-gradient(90deg, #c8a850, transparent);
+}
+
+.lead {
+  color: #7d8aa5;
+  font-size: 14px;
+  line-height: 1.9;
+  margin-bottom: 18px;
+}
+
+.lead strong {
+  color: #c8a850;
+  font-weight: 700;
+}
+
+.card,
+.status-card,
+.quick-card,
+.room-button,
+.choice-row {
+  background: linear-gradient(160deg, rgba(17,23,40,0.96), rgba(14,20,34,0.96));
+  border: 1px solid rgba(180,160,100,0.14);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before,
+.status-card::before,
+.quick-card::before,
+.room-button::before,
+.choice-row::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,170,80,0.24), transparent);
+}
+
+.status-card {
+  padding: 18px 20px 16px;
+}
+
+.status-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(180,160,100,0.12);
+  color: #ddd8c8;
+  font-weight: 700;
+}
+
+.status-head span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px 16px;
+  padding-top: 15px;
+  color: #7d8aa5;
+  font-size: 13px;
+  text-align: center;
+}
+
+.status-stats strong {
+  color: #c8a850;
+  font-weight: 800;
+}
+
+.status-detail {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(180,160,100,0.12);
+}
+
+.detail-line {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 10px;
+  color: #8f9ab3;
+  line-height: 1.65;
+  font-size: 13px;
+}
+
+.detail-line strong {
+  color: #c8a850;
+  font-weight: 800;
+}
+
+.status-help {
+  margin-top: 12px;
+}
+
+.status-help summary {
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(200,170,80,0.38);
+  color: #c8a850;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.status-help summary::-webkit-details-marker { display: none; }
+
+.legend {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(180,160,100,0.12);
+  color: #7d8aa5;
+  line-height: 1.65;
+  font-size: 13px;
+}
+
+.legend strong {
+  color: #c8a850;
+  font-weight: 800;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.quick-card {
+  padding: 14px 16px;
+  min-height: 132px;
+}
+
+.quick-title {
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #ddd8c8;
+  background: rgba(200,170,80,0.12);
+  border: 1px solid rgba(200,170,80,0.22);
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.quick-card p,
+.quick-card ul {
+  color: #7d8aa5;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.quick-card ul {
+  padding-left: 16px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.card {
+  padding: 16px;
+}
+
+.card-title {
+  color: #ddd8c8;
+  font-family: 'Cinzel', 'Pretendard', serif;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.item-list {
+  display: grid;
+  gap: 10px;
+}
+
+.item {
+  border: 1px solid rgba(180,160,100,0.08);
+  background: rgba(8,12,24,0.42);
+  border-radius: 6px;
+  padding: 11px;
+}
+
+.item-name {
+  color: #ddd8c8;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.item-meta {
+  color: #7d8aa5;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.tag {
+  display: inline-flex;
+  width: max-content;
+  color: #c8a850;
+  border: 1px solid rgba(200,170,80,0.22);
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 10px;
+  margin-top: 7px;
+}
+
+.ship-layout {
+  position: relative;
+  min-height: 420px;
+  border: 1px solid rgba(180,160,100,0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(200,170,80,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,170,80,0.05) 1px, transparent 1px),
+    rgba(8,12,24,0.46);
+  background-size: 30px 30px, 30px 30px, auto;
+  overflow: hidden;
+}
+
+.layout-note {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  text-align: center;
+  color: #6e7486;
+  font-style: italic;
+  font-size: 13px;
+}
+
+.ship-axis {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 52%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,170,80,0.34), transparent);
+}
+
+.ship-axis::before,
+.ship-axis::after {
+  position: absolute;
+  top: -8px;
+  color: #5f6b82;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.ship-axis::before { content: 'BOW'; left: 0; }
+.ship-axis::after { content: 'STERN'; right: 0; }
+
+.room-button {
+  position: absolute;
+  min-width: 96px;
+  text-align: center;
+  padding: 10px 12px;
+  color: #ddd8c8;
+  font-weight: 800;
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+.room-button span {
+  display: block;
+  color: #76839d;
+  font-size: 10px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.captain { right: 9%; top: 23%; }
+.deck-room { left: 43%; top: 30%; }
+.crew { left: 13%; top: 46%; }
+.galley { left: 39%; top: 47%; }
+.infirmary { right: 15%; top: 47%; }
+.cargo { left: 30%; top: 64%; }
+.powder { right: 20%; top: 64%; min-width: 82px; }
+.water { left: 39%; bottom: 9%; }
+
+.room-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.room-card {
+  padding: 15px 17px;
+}
+
+.room-card h3 {
+  color: #c8a850;
+  font-family: 'Cinzel', 'Pretendard', serif;
+  font-size: 17px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.room-card p {
+  color: #9aa3b7;
+  line-height: 1.8;
+  font-size: 13px;
+}
+
+.choice-list {
+  display: grid;
+  gap: 10px;
+}
+
+.choice-row {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+}
+
+.choice-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #c8a850;
+  border: 1px solid rgba(200,170,80,0.32);
+  background: rgba(200,170,80,0.08);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.choice-text {
+  min-height: 38px;
+  border: 1px solid rgba(180,160,100,0.08);
+  background: rgba(8,12,24,0.42);
+  color: #8d9ab5;
+  line-height: 1.55;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  border-radius: 5px;
+  padding: 8px 11px;
+}
+
+.choice-text:hover {
+  color: #ddd8c8;
+  border-color: rgba(200,170,80,0.28);
+  background: rgba(200,170,80,0.07);
+}
+
+.mini-btn {
+  height: 38px;
+  min-width: 48px;
+  border: 1px solid rgba(200,170,80,0.24);
+  background: rgba(8,12,24,0.46);
+  color: #c8a850;
+  border-radius: 5px;
+  padding: 0 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mini-btn:hover {
+  color: #ddd8c8;
+  border-color: rgba(200,170,80,0.45);
+  background: rgba(200,170,80,0.14);
+}
+
+.draft-box {
+  margin-top: 12px;
+  padding: 13px 14px;
+  border: 1px solid rgba(180,160,100,0.12);
+  border-radius: 6px;
+  background: rgba(8,12,24,0.52);
+  color: #c8d0e0;
+  line-height: 1.7;
+  font-size: 13px;
+}
+
+.draft-box strong {
+  display: block;
+  color: #c8a850;
+  margin-bottom: 6px;
+}
+
+.notice {
+  color: #6f7d99;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 10px;
+}
+
+@media (max-width: 720px) {
+  .page { padding-inline: 14px; }
+  .section-title { font-size: 24px; }
+  .status-stats,
+  .quick-grid,
+  .detail-grid,
+  .room-grid { grid-template-columns: 1fr; }
+  .choice-row { grid-template-columns: 30px minmax(0, 1fr) auto auto; }
+  .choice-text { font-size: 12px; }
+  .mini-btn { min-width: 42px; padding: 0 8px; font-size: 11px; }
+  .detail-line { grid-template-columns: 80px minmax(0, 1fr); }
+  .ship-layout { min-height: 460px; }
+  .room-button { min-width: 88px; padding: 9px 10px; }
+  .captain { right: 7%; top: 21%; }
+  .deck-room { left: 36%; top: 31%; }
+  .crew { left: 7%; top: 46%; }
+  .galley { left: 35%; top: 47%; }
+  .infirmary { right: 8%; top: 47%; }
+  .cargo { left: 18%; top: 65%; }
+  .powder { right: 10%; top: 65%; }
+  .water { left: 33%; bottom: 8%; }
+}
+</style>
+</head>
+<body>
+<div class="stars-bg"></div>
+
+<main class="page">
+  <section class="section">
+    <div class="section-label">Status Window</div>
+    <h1 class="section-title">상태창 <span class="gold">읽기</span></h1>
+    <p class="lead">매 턴 응답 끝에 <strong>상태창</strong>이 붙으면, 현재 보유 자원과 항해 상황을 한눈에 확인할 수 있다.</p>
+    <div class="status-card">
+      <div class="status-head">
+        <span>⚓ 상 조르즈</span>
+        <span>▦ Day 3</span>
+        <span>📍 리스본 항구</span>
+      </div>
+      <div class="status-stats">
+        <span>💰 <strong>1,200</strong> 크루자두</span>
+        <span>👥 <strong>8</strong>명</span>
+        <span>📦 <strong>12</strong>일치</span>
+        <span>🧺 <strong>18/30</strong> 적재</span>
+        <span>⭐ <strong>0</strong> 명성</span>
+        <span>🏅 무명의 선장</span>
+      </div>
+      <div class="status-detail">
+        <div class="detail-line"><strong>항로</strong><span>리스본 → 마데이라 준비 중. 출항 전 식량과 화물칸 확인 필요.</span></div>
+        <div class="detail-line"><strong>선박</strong><span>카라벨. 상태 양호. 빠르지만 폭풍과 장기 항해에는 취약하다.</span></div>
+        <div class="detail-line"><strong>소지품</strong><span>은목걸이, 선장 일지. 은목걸이는 이네스가 이미 알아본 물건이다.</span></div>
+        <div class="detail-line"><strong>최근 사건</strong><span>루이사가 출항 전 리스본 부두의 소문을 확인해주겠다고 약속했다.</span></div>
+      </div>
+      <details class="status-help">
+        <summary>i</summary>
+        <div class="legend">
+          <div><strong>💰 금화</strong> = 교역과 수리에 사용</div>
+          <div><strong>👥 선원</strong> = 항해에 필요한 인원. 부족하면 출항 불가</div>
+          <div><strong>📦 식량</strong> = 남은 식량 일수. 0이 되면 괴혈병과 반란 위험</div>
+          <div><strong>🧺 적재</strong> = 화물칸. 가득 차면 더 못 싣는다</div>
+          <div><strong>⭐ 명성</strong> = 높을수록 좋은 의뢰와 칭호 획득</div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Quick Buttons</div>
+    <h2 class="section-title">바로가기 <span class="gold">버튼</span></h2>
+    <div class="rule"></div>
+    <p class="lead">실리태번 채팅창 위의 <strong>QR바 버튼</strong>에 해당한다. 버튼을 누르면 행동이 실행되고, 필요한 경우 새 HTML 결과창이 출력된다.</p>
+    <div class="quick-grid">
+      <article class="quick-card">
+        <div class="quick-title">⚓ 출항</div>
+        <p>목적지 선택 → 보급 확인 → 항해 이벤트 판정 → 도착/표류/사건 결과 출력.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">🏰 항구 탐색</div>
+        <p>항구 시설 목록 출력. 교역소, 조선소, 술집, 정보상, 성소 중 선택지가 나온다.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">🛒 교역</div>
+        <p>현재 항구의 물품 시세, 보유 화물, 예상 이익을 보여주고 구매/판매를 처리한다.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">👥 선원과 대화</div>
+        <p>선원 또는 주요 인물을 고른다. 관계 기억, 소지품 인지, 로맨스 장면을 이어간다.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">📖 항해일지</div>
+        <p>날짜별 사건, 약속, 소문, 관계 변화를 요약한다. 장기 기억 확인용이다.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">📦 화물칸 점검</div>
+        <p>소지품과 화물 상세창 출력. 쥐, 밀항자, 침수, 파손 같은 이벤트도 확인한다.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">🗺 항해도</div>
+        <p>현재 항구, 다음 항로, 추천 교역 루트, 위험 해역을 지도형 HTML로 보여준다.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">🚪 선내 구조</div>
+        <p>선장실, 주갑판, 의무실, 화물칸 등 장소 버튼을 보여주고 장소 기반 장면을 시작한다.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">📋 상태 확인</div>
+        <p>현재 상태창보다 자세한 선박, 재정, 선원, 식량, 명성, 칭호 정보를 펼친다.</p>
+      </article>
+      <article class="quick-card">
+        <div class="quick-title">✍ 대필</div>
+        <p>선택한 문장을 바탕으로 유저 시점의 긴 행동문을 AI가 대신 작성한다.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Cargo Detail</div>
+    <h2 class="section-title">소지품과 <span class="gold">화물</span></h2>
+    <div class="rule"></div>
+    <p class="lead"><strong>화물칸 점검</strong> 또는 <strong>상태 확인</strong> 버튼을 눌렀을 때 나오는 상세창 예시다. 기본 상태창에는 요약만 남긴다.</p>
+    <div class="detail-grid">
+      <div class="card">
+        <div class="card-title">소지품</div>
+        <div class="item-list">
+          <div class="item">
+            <div class="item-name">은목걸이</div>
+            <div class="item-meta">오래된 항구 성소 근처에서 발견했다. 이네스가 알아본 물건.</div>
+            <span class="tag">중요</span>
+          </div>
+          <div class="item">
+            <div class="item-name">선장 일지</div>
+            <div class="item-meta">약속, 소문, 사적인 기억을 기록하는 항해 노트.</div>
+            <span class="tag">스토리</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">화물</div>
+        <div class="item-list">
+          <div class="item">
+            <div class="item-name">돛천</div>
+            <div class="item-meta">2묶음. 수리에도, 교역에도 쓸 수 있다.</div>
+            <span class="tag">보급품</span>
+          </div>
+          <div class="item">
+            <div class="item-name">올리브유</div>
+            <div class="item-meta">3항아리. 어느 항구에서든 꾸준히 팔리는 평범한 화물.</div>
+            <span class="tag">교역</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Blueprints</div>
+    <h2 class="section-title">카라벨(Caravela) <span class="gold">내부 구조</span></h2>
+    <div class="rule"></div>
+    <p class="lead">배 그림 자체는 줄이고, 각 구역의 실제 위치감이 살아나도록 <strong>장소 버튼</strong>만 배치한다. 버튼을 누르면 해당 장소에서 장면이 시작된다.</p>
+    <div class="ship-layout">
+      <div class="layout-note">소형 탐험선 · 시작 배 · 선장실은 선미 쪽, 화물칸은 중앙 하부, 주갑판은 중앙 상부</div>
+      <div class="ship-axis"></div>
+      <button class="room-button captain">🧭 선장실<span>선미 · 개인 장면</span></button>
+      <button class="room-button deck-room">⚓ 주갑판<span>중앙 · 항해 명령</span></button>
+      <button class="room-button crew">🛏 선원 거주구<span>선수 쪽 · 선원 관계</span></button>
+      <button class="room-button galley">🍖 주방<span>중앙 · 식량 관리</span></button>
+      <button class="room-button infirmary">⚕ 의무실<span>우현 · 치료 장면</span></button>
+      <button class="room-button cargo">📦 화물칸<span>중앙 하부 · 교역품</span></button>
+      <button class="room-button powder">🧨 탄약고<span>선미 하부 · 위험물</span></button>
+      <button class="room-button water">💧 담수 탱크<span>하부 · 보급</span></button>
+    </div>
+    <div class="room-grid">
+      <article class="card room-card">
+        <h3>🧭 선장실</h3>
+        <p>지도, 항해일지, 개인 물품, 비밀 편지가 보관된다. 둘만의 장면이 가장 자연스럽게 시작되는 곳.</p>
+      </article>
+      <article class="card room-card">
+        <h3>⚕ 의무실</h3>
+        <p>부상과 질병을 다룬다. 이네스와의 긴장감 있는 간호 장면에 사용한다.</p>
+      </article>
+      <article class="card room-card">
+        <h3>📦 화물칸</h3>
+        <p>교역품, 보급품, 젖은 화물, 숨겨진 물건을 점검한다. 소지품 기억과 직접 연결된다.</p>
+      </article>
+      <article class="card room-card">
+        <h3>⚓ 주갑판</h3>
+        <p>항해 명령, 날씨 이벤트, 선원 갈등, 갑작스러운 고백이 일어나는 열린 공간.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Choice Builder</div>
+    <h2 class="section-title">선택지 <span class="gold">입력 방식</span></h2>
+    <div class="rule"></div>
+    <p class="lead">문장 칸을 누르면 입력 초안에 계속 쌓인다. 각 문장 오른쪽의 <strong>선택</strong>은 바로 입력, <strong>대필</strong>은 그 문장을 길게 풀어쓰는 요청이다.</p>
+    <div class="choice-list">
+      <div class="choice-row">
+        <div class="choice-num">1</div>
+        <button class="choice-text" data-choice="이네스에게 왜 은목걸이가 눈에 들어왔는지 조용히 묻는다.">이네스에게 왜 은목걸이가 눈에 들어왔는지 조용히 묻는다.</button>
+        <button class="mini-btn choose" data-choice="이네스에게 왜 은목걸이가 눈에 들어왔는지 조용히 묻는다.">선택</button>
+        <button class="mini-btn ghost" data-choice="이네스에게 왜 은목걸이가 눈에 들어왔는지 조용히 묻는다.">대필</button>
+      </div>
+      <div class="choice-row">
+        <div class="choice-num">2</div>
+        <button class="choice-text" data-choice="리스본 시장에 들러 출항 전 시세를 비교한다.">리스본 시장에 들러 출항 전 시세를 비교한다.</button>
+        <button class="mini-btn choose" data-choice="리스본 시장에 들러 출항 전 시세를 비교한다.">선택</button>
+        <button class="mini-btn ghost" data-choice="리스본 시장에 들러 출항 전 시세를 비교한다.">대필</button>
+      </div>
+      <div class="choice-row">
+        <div class="choice-num">3</div>
+        <button class="choice-text" data-choice="상 조르즈로 돌아가 마데이라 항로를 준비한다.">상 조르즈로 돌아가 마데이라 항로를 준비한다.</button>
+        <button class="mini-btn choose" data-choice="상 조르즈로 돌아가 마데이라 항로를 준비한다.">선택</button>
+        <button class="mini-btn ghost" data-choice="상 조르즈로 돌아가 마데이라 항로를 준비한다.">대필</button>
+      </div>
+    </div>
+    <div class="draft-box" id="draft"><strong>입력 초안</strong><span>문장 칸을 누르면 여기에 선택지가 쌓입니다.</span></div>
+    <p class="notice">프리뷰에서는 동작 예시만 보여준다. 실리태번 최종본에서는 펜트하우스 선택지처럼 채팅 입력창에 붙여넣는 방식으로 연결한다.</p>
+  </section>
+</main>
+
+<script>
+const draft = document.getElementById('draft');
+const textButtons = document.querySelectorAll('.choice-text');
+const chooseButtons = document.querySelectorAll('.choose');
+const ghostButtons = document.querySelectorAll('.ghost');
+
+function setDraft(text) {
+  draft.innerHTML = `<strong>입력 초안</strong><span>${text}</span>`;
+  draft.dataset.empty = 'false';
+}
+
+function getDraftText() {
+  if (draft.dataset.empty !== 'false') return '';
+  const span = draft.querySelector('span');
+  return span ? span.textContent.trim() : '';
+}
+
+textButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const current = getDraftText();
+    const next = button.dataset.choice;
+    setDraft(current ? `${current} ${next}` : next);
+  });
+});
+
+chooseButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    setDraft(`[선택 입력 예시] ${button.dataset.choice}`);
+  });
+});
+
+ghostButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    setDraft(`[대필 요청 예시] 다음 내용을 {{user}} 시점의 자연스러운 장면으로 길게 대필해줘: ${button.dataset.choice}`);
+  });
+});
+
+draft.dataset.empty = 'true';
+</script>
+</body>
+</html>

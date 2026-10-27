@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대항해시대 — 봇 소개</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IM+Fell+English:ital@0;1&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #080c18;
+  color: #c8d0e0;
+  font-family: 'Pretendard', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   별 + 유성
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 8% 15%, rgba(200,180,140,0.5), transparent),
+    radial-gradient(1px 1px at 22% 55%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 42% 8%, rgba(220,200,160,0.6), transparent),
+    radial-gradient(1px 1px at 65% 35%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1px 1px at 88% 72%, rgba(200,180,140,0.4), transparent),
+    radial-gradient(1px 1px at 12% 85%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 78% 12%, rgba(220,200,160,0.5), transparent),
+    radial-gradient(1px 1px at 55% 68%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1px 1px at 35% 92%, rgba(200,180,140,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 92% 45%, rgba(220,200,160,0.5), transparent),
+    radial-gradient(1px 1px at 5% 48%, rgba(200,180,140,0.3), transparent),
+    radial-gradient(1px 1px at 48% 38%, rgba(200,180,140,0.2), transparent);
+  pointer-events: none;
+  z-index: 0;
+  animation: twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes twinkle { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+.shooting-star {
+  position: fixed;
+  width: 100px; height: 1px;
+  background: linear-gradient(90deg, rgba(200,180,140,0.7), transparent);
+  z-index: 0; opacity: 0; pointer-events: none;
+}
+.shooting-star::before {
+  content: ''; position: absolute; left: 0; top: -1px;
+  width: 4px; height: 3px;
+  background: rgba(230,210,170,0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 8px 3px rgba(200,180,140,0.4);
+}
+.ss1 { top: 8%; left: 75%; transform: rotate(-30deg); animation: shoot 7s ease-in 1s infinite; }
+.ss2 { top: 35%; left: 90%; transform: rotate(-25deg); animation: shoot 9s ease-in 4s infinite; }
+.ss3 { top: 60%; left: 60%; transform: rotate(-35deg); animation: shoot 11s ease-in 7s infinite; }
+@keyframes shoot {
+  0% { opacity: 0; transform: rotate(-30deg) translateX(0); }
+  2% { opacity: 1; }
+  8% { opacity: 0; transform: rotate(-30deg) translateX(-300px); }
+  100% { opacity: 0; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   히어로
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  z-index: 1;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 200px;
+  background: linear-gradient(to top, #080c18, transparent);
+  pointer-events: none;
+}
+
+/* 바다 물결 */
+.ocean {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 120px;
+  overflow: hidden;
+  opacity: 0.15;
+}
+.wave {
+  position: absolute;
+  bottom: -10px; left: -5%;
+  width: 110%;
+  height: 60px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60'%3E%3Cpath d='M0,30 Q150,0 300,30 T600,30 T900,30 T1200,30 V60 H0 Z' fill='%23c8a850' fill-opacity='0.3'/%3E%3C/svg%3E") repeat-x;
+  animation: wave 8s linear infinite;
+}
+.wave:nth-child(2) {
+  bottom: -5px; opacity: 0.5;
+  animation: wave 6s linear infinite reverse;
+}
+@keyframes wave { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+.hero-compass {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: #c8a850;
+  text-shadow: 0 0 30px rgba(200,170,80,0.3);
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: 52px;
+  font-weight: 700;
+  color: #ddd8c8;
+  letter-spacing: 6px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  text-shadow: 0 0 40px rgba(200,170,80,0.15);
+}
+.hero-sub {
+  font-family: 'IM Fell English', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: #6a7a9a;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+}
+.hero-tagline {
+  font-size: 16px;
+  color: #8a9ab8;
+  line-height: 1.8;
+  max-width: 500px;
+}
+.hero-tagline em {
+  color: #c8a850;
+  font-style: normal;
+  font-weight: 600;
+}
+.hero-divider {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c8a850, transparent);
+  margin: 24px auto;
+}
+.hero-info {
+  display: flex;
+  gap: 24px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hero-badge {
+  font-size: 12px;
+  color: #5a6a80;
+  border: 1px solid rgba(180,160,100,0.15);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   섹션 공통
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.section {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: #4a5a70;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ddd8c8;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+.section-title .gold { color: #c8a850; }
+.section-divider {
+  width: 50px;
+  height: 1px;
+  background: linear-gradient(90deg, #c8a850, transparent);
+  margin-bottom: 24px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   세계관
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.lore-text {
+  font-size: 15px;
+  color: #8a9ab8;
+  line-height: 2;
+}
+.lore-text strong {
+  color: #c8a850;
+  font-weight: 600;
+}
+.lore-quote {
+  margin: 24px 0;
+  padding: 16px 20px;
+  border-left: 2px solid rgba(200,170,80,0.3);
+  background: rgba(10,14,26,0.5);
+  border-radius: 0 6px 6px 0;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: #7a8aa0;
+  line-height: 1.8;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   캐릭터 카드
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.char-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) { .char-grid { grid-template-columns: 1fr; } }
+
+.char-card {
+  background: linear-gradient(160deg, #111728, #151d30);
+  border: 1px solid rgba(180,160,100,0.12);
+  border-radius: 6px;
+  padding: 16px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.char-portrait {
+  flex-shrink: 0;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(200,170,80,0.08), rgba(100,140,200,0.08));
+  border: 1px solid rgba(180,160,100,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.char-portrait img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.char-portrait .char-initial {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  color: rgba(200,170,80,0.3);
+  font-weight: 700;
+}
+.char-info { flex-grow: 1; min-width: 0; }
+.char-portrait { cursor: pointer; }
+.char-portrait:hover { border-color: rgba(200,170,80,0.35); box-shadow: 0 0 12px rgba(200,170,80,0.15); }
+
+/* 캐릭터 팝업 모달 */
+.char-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(5,8,16,0.88);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.char-modal-overlay.active { display: flex; }
+.char-modal {
+  text-align: center;
+  animation: modalIn 0.25s ease;
+}
+.char-modal-portrait {
+  width: 320px; height: 320px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(200,170,80,0.08), rgba(100,140,200,0.08));
+  border: 2px solid rgba(200,170,80,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+.char-modal-portrait img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.char-modal-portrait .char-initial {
+  font-family: 'Cinzel', serif;
+  font-size: 64px;
+  color: rgba(200,170,80,0.3);
+  font-weight: 700;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.char-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,170,80,0.2), transparent);
+}
+.char-card:hover {
+  border-color: rgba(200,170,80,0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.char-role {
+  font-size: 10px;
+  color: #5a6a80;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.char-name {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ddd8c8;
+  margin-bottom: 4px;
+}
+.char-name-kr {
+  font-size: 12px;
+  color: #6a7a9a;
+  margin-bottom: 8px;
+}
+.char-quote {
+  font-family: 'IM Fell English', 'Pretendard', serif;
+  font-style: italic;
+  font-size: 12.5px;
+  color: #7a8aa0;
+  line-height: 1.6;
+  padding: 8px 10px;
+  background: rgba(10,14,26,0.4);
+  border-left: 2px solid rgba(200,170,80,0.15);
+  border-radius: 0 4px 4px 0;
+}
+.char-tag {
+  display: inline-block;
+  font-size: 10px;
+  color: #c8a850;
+  border: 1px solid rgba(200,170,80,0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 8px;
+  margin-right: 4px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   시스템 소개
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.sys-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) { .sys-grid { grid-template-columns: 1fr; } }
+
+.sys-card {
+  background: rgba(15,22,38,0.5);
+  border: 1px solid rgba(180,160,100,0.08);
+  border-radius: 6px;
+  padding: 18px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.sys-card:hover {
+  border-color: rgba(200,170,80,0.2);
+  background: rgba(20,30,50,0.5);
+}
+.sys-icon { font-size: 28px; margin-bottom: 10px; }
+.sys-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ddd8c8;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.sys-desc {
+  font-size: 12.5px;
+  color: #6a7a9a;
+  line-height: 1.6;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   항로 미리보기
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.routes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.route {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(15,22,38,0.4);
+  border: 1px solid rgba(180,160,100,0.06);
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+.route:hover {
+  border-color: rgba(200,170,80,0.2);
+  transform: translateX(4px);
+}
+.route-icon { font-size: 22px; }
+.route-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ddd8c8;
+}
+.route-desc { font-size: 12.5px; color: #5a6a80; margin-top: 2px; }
+.route-goods {
+  margin-left: auto;
+  font-size: 11px;
+  color: #c8a850;
+  text-align: right;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   그리팅 미리보기
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.greeting-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) { .greeting-grid { grid-template-columns: 1fr; } }
+
+.greeting-card {
+  background: linear-gradient(160deg, #111728, #151d30);
+  border: 1px solid rgba(180,160,100,0.1);
+  border-radius: 6px;
+  padding: 18px;
+  transition: all 0.3s;
+}
+.greeting-card:hover {
+  border-color: rgba(200,170,80,0.25);
+  transform: translateY(-2px);
+}
+.greeting-num {
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2a3a50;
+  margin-bottom: 6px;
+}
+.greeting-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ddd8c8;
+  margin-bottom: 6px;
+}
+.greeting-desc {
+  font-size: 12.5px;
+  color: #6a7a9a;
+  line-height: 1.6;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   플레이 가이드
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.guide-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.guide-step {
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(180,160,100,0.06);
+}
+.guide-step:last-child { border-bottom: none; }
+.guide-num {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(200,170,80,0.1);
+  border: 1px solid rgba(200,170,80,0.2);
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #c8a850;
+}
+.guide-body { flex-grow: 1; }
+.guide-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ddd8c8;
+  margin-bottom: 4px;
+}
+.guide-desc {
+  font-size: 13px;
+  color: #6a7a9a;
+  line-height: 1.7;
+}
+.guide-desc strong { color: #c8a850; font-weight: 600; }
+
+/* QR 가이드 */
+.qr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+@media (max-width: 600px) { .qr-grid { grid-template-columns: 1fr; } }
+.qr-item {
+  background: rgba(15,22,38,0.4);
+  border: 1px solid rgba(180,160,100,0.08);
+  border-radius: 6px;
+  padding: 14px;
+  transition: all 0.3s;
+}
+.qr-item:hover {
+  border-color: rgba(200,170,80,0.2);
+}
+.qr-btn-demo {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ddd8c8;
+  background: rgba(200,170,80,0.12);
+  border: 1px solid rgba(200,170,80,0.2);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.qr-explain {
+  font-size: 12px;
+  color: #6a7a9a;
+  line-height: 1.6;
+}
+
+/* 상태창 데모 */
+.status-demo {
+  position: relative;
+  background: rgba(10,14,26,0.6);
+  border: 1px solid rgba(200,170,80,0.15);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 2;
+  color: #8a9ab8;
+  margin: 16px 0;
+  font-family: 'Pretendard', sans-serif;
+  text-align: center;
+}
+.status-demo .st-row { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.status-demo .st-label { color: #5a6a80; font-size: 11px; }
+.status-demo .st-val { color: #c8a850; font-weight: 600; }
+.status-demo .st-header {
+  font-weight: 700;
+  color: #ddd8c8;
+  border-bottom: 1px solid rgba(180,160,100,0.1);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.st-info-btn {
+  position: absolute;
+  top: 58px; right: 10px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(200,170,80,0.1);
+  border: 1px solid rgba(200,170,80,0.2);
+  color: #c8a850;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.st-info-btn:hover { background: rgba(200,170,80,0.2); }
+.st-info-popup {
+  display: none;
+  position: absolute;
+  top: 86px; right: 10px;
+  background: rgba(15,22,38,0.97);
+  border: 1px solid rgba(200,170,80,0.2);
+  border-radius: 8px;
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #7a8aa0;
+  z-index: 10;
+  width: 240px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.st-info-popup.active { display: block; }
+.st-info-popup strong { color: #c8a850; }
+
+/* 교역 가이드 */
+.trade-tip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(15,22,38,0.3);
+  border-left: 2px solid rgba(200,170,80,0.3);
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 8px;
+}
+.trade-tip-icon { font-size: 20px; flex-shrink: 0; }
+.trade-tip-text {
+  font-size: 12.5px;
+  color: #7a8aa0;
+  line-height: 1.6;
+}
+.trade-tip-text strong { color: #c8a850; }
+
+/* 위험도 바 */
+.danger-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+.danger-dots {
+  display: flex;
+  gap: 3px;
+}
+.danger-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(180,160,100,0.15);
+}
+.danger-dot.active { background: #c8a850; }
+.danger-dot.red { background: #a85050; }
+.danger-label {
+  font-size: 11px;
+  color: #5a6a80;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   세계 지도 + 선박 도면
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.atlas-wrapper {
+  background: rgba(10,14,26,0.8);
+  border: 1px solid rgba(200,168,80,0.25);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 15px;
+  overflow: hidden;
+}
+.atlas-title {
+  font-family: 'Cinzel', serif;
+  color: #c8a850;
+  font-size: 1.15rem;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.map-svg-box { width: 100%; }
+.map-legend-row {
+  display: flex; justify-content: center; gap: 18px;
+  margin-top: 12px; flex-wrap: wrap;
+}
+.map-legend-row .ml-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.8rem; color: rgba(200,180,140,0.55);
+}
+.port-info-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.port-info-card {
+  background: rgba(200,168,80,0.05);
+  border: 1px solid rgba(200,168,80,0.18);
+  border-radius: 9px;
+  padding: 13px;
+  transition: all 0.3s;
+}
+.port-info-card:hover {
+  border-color: rgba(200,168,80,0.45);
+  background: rgba(200,168,80,0.1);
+  transform: translateY(-2px);
+}
+.port-info-card .pi-name { font-family:'Cinzel',serif; color:#c8a850; font-size:0.95rem; font-weight:700; margin-bottom:1px; }
+.port-info-card .pi-loc { font-size:0.75rem; color:rgba(200,180,140,0.45); margin-bottom:8px; font-style:italic; }
+.port-info-card .pi-desc { font-size:0.82rem; color:rgba(200,208,224,0.75); line-height:1.5; margin-bottom:8px; }
+.port-info-card .pi-goods { font-size:0.78rem; color:rgba(200,180,140,0.55); line-height:1.6; }
+.pi-goods .buy-tag { color: #6cb8a0; }
+.pi-goods .sell-tag { color: #c88060; }
+.port-info-card .pi-warn { margin-top:6px; padding-top:6px; border-top:1px solid rgba(200,168,80,0.1); font-size:0.78rem; color:rgba(180,100,100,0.75); }
+
+.ship-cross-title {
+  font-family: 'Cinzel', serif; color: rgba(200,180,140,0.75);
+  font-size: 1rem; text-align: center; margin-bottom: 4px;
+}
+.ship-cross-sub {
+  text-align: center; font-size: 0.82rem;
+  color: rgba(200,180,140,0.35); margin-bottom: 16px; font-style: italic;
+}
+.room-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px; margin-top: 18px;
+}
+.room-card {
+  background: rgba(200,168,80,0.05);
+  border: 1px solid rgba(200,168,80,0.15);
+  border-radius: 9px; padding: 13px;
+}
+.room-card .rc-head { display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+.room-card .rc-icon { font-size:1.4rem; }
+.room-card .rc-name { font-family:'Cinzel',serif; color:#c8a850; font-size:1.05rem; font-weight:600; }
+.room-card .rc-desc { font-size:0.9rem; color:rgba(200,208,224,0.7); line-height:1.6; }
+
+.ship-compare-tbl { width:100%; border-collapse:collapse; margin-top:16px; }
+.ship-compare-tbl th {
+  font-family:'Cinzel',serif; color:#c8a850; font-size:0.82rem;
+  padding:10px 6px; border-bottom:1px solid rgba(200,168,80,0.25); text-align:center;
+}
+.ship-compare-tbl td {
+  padding:8px 6px; text-align:center; font-size:0.8rem;
+  color:rgba(200,208,224,0.75); border-bottom:1px solid rgba(200,168,80,0.06);
+}
+.ship-compare-tbl .sn { font-family:'Cinzel',serif; color:#c8a850; font-weight:600; text-align:left; padding-left:10px; }
+.stat-bar-sm { display:inline-block; height:5px; border-radius:3px; background:rgba(200,168,80,0.5); vertical-align:middle; margin-right:4px; }
+
+.upgrade-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px; margin-top: 16px;
+}
+.upgrade-chip {
+  background: rgba(200,168,80,0.05); border:1px solid rgba(200,168,80,0.15);
+  border-radius: 7px; padding: 10px; text-align: center;
+  transition: all 0.3s;
+}
+.upgrade-chip:hover { border-color:rgba(200,168,80,0.4); background:rgba(200,168,80,0.1); }
+.upgrade-chip .uc-i { font-size:1.3rem; margin-bottom:4px; }
+.upgrade-chip .uc-n { font-family:'Cinzel',serif; color:#c8a850; font-size:0.82rem; margin-bottom:2px; }
+.upgrade-chip .uc-e { font-size:0.75rem; color:rgba(200,208,224,0.6); margin-bottom:4px; }
+.upgrade-chip .uc-c { font-size:0.75rem; color:rgba(200,180,140,0.45); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   푸터
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 40px 20px 60px;
+  border-top: 1px solid rgba(180,160,100,0.06);
+}
+.footer-compass { font-size: 24px; color: #c8a850; margin-bottom: 12px; opacity: 0.6; }
+.footer-text {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: #5a6a80;
+  line-height: 1.7;
+}
+.footer-credit {
+  font-size: 13px;
+  color: #3a4a60;
+  margin-top: 20px;
+  letter-spacing: 2px;
+}
+</style>
+</head>
+<body>
+
+<div class="stars-bg"></div>
+<div class="shooting-star ss1"></div>
+<div class="shooting-star ss2"></div>
+<div class="shooting-star ss3"></div>
+
+<!-- ═══ 히어로 ═══ -->
+<div class="hero">
+  <div class="ocean">
+    <div class="wave"></div>
+    <div class="wave"></div>
+  </div>
+  <div class="hero-compass">✦</div>
+  <h1 class="hero-title">A ERA DOS<br>DESCOBRIMENTOS</h1>
+  <p class="hero-sub">The Age of Discovery — 1498</p>
+  <div class="hero-divider"></div>
+  <p class="hero-tagline">
+    후추 1kg이 <em>금 1kg</em>과 같은 가치를 지닌 시대.<br>
+    배 한 척이면 인생을 바꿀 수 있었고,<br>
+    지도의 끝에는 <em>아무것도 쓰여 있지 않았다.</em>
+  </p>
+  <div class="hero-divider"></div>
+  <div class="hero-info">
+    <span class="hero-badge">⛵ 교역 시뮬레이션</span>
+    <span class="hero-badge">💕 로맨스 7인</span>
+    <span class="hero-badge">🎲 랜덤 이벤트</span>
+    <span class="hero-badge">🗺️ 8개 항구</span>
+  </div>
+</div>
+
+<!-- ═══ 세계관 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Worldview</div>
+  <h2 class="section-title">바다 <span class="gold">너머의</span> 세계</h2>
+  <div class="section-divider"></div>
+  <div class="lore-text">
+    <strong>1498년, 포르투갈 리스본.</strong><br><br>
+    바스코 다 가마가 인도 항로를 발견한 바로 그 해.
+    유럽은 향신료에 미쳐 있고, 지도에는 아직 빈 곳이 넘친다.
+    포르투갈과 스페인이 세계를 양분하려 다투고,
+    모험가들은 미지의 바다로 뛰어든다.<br><br>
+    당신은 리스본에서 출발하는 신참 항해자.
+    <strong>작은 배 한 척</strong>과 약간의 자본금으로 시작해서,
+    교역으로 돈을 벌고, 미지의 항로를 개척하고,
+    때로는 해적과 맞서며 이름을 알려간다.
+  </div>
+  <div class="lore-quote">
+    "별은 거짓말을 안 합니다. 사람과는 다르죠."<br>
+    — 에스테방 로페스, 항해사
+  </div>
+</div>
+
+<!-- ═══ 캐릭터 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Characters</div>
+  <h2 class="section-title">바다 <span class="gold">위의</span> 사람들</h2>
+  <div class="section-divider"></div>
+  <div class="char-grid">
+
+    <div class="char-card">
+      <div class="char-portrait"><span class="char-initial">E</span></div>
+      <div class="char-info">
+        <div class="char-role">Navigator</div>
+        <div class="char-name">Estêvão Lopes <span style="font-size:10px">💕</span></div>
+        <div class="char-name-kr">에스테방 로페스 · 항해사 · 30대 중반</div>
+        <div class="char-quote">"…별이 예쁜 밤이군요. 아, 아무것도 아닙니다, 선장."</div>
+        <span class="char-tag">과묵</span><span class="char-tag">슬로우번</span><span class="char-tag">트라우마</span>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-portrait"><span class="char-initial">I</span></div>
+      <div class="char-info">
+        <div class="char-role">Ship's Doctor</div>
+        <div class="char-name">Inês de Cruz <span style="font-size:10px">💕</span></div>
+        <div class="char-name-kr">이네스 드 크루즈 · 선의(남장) · 20대 후반</div>
+        <div class="char-quote">"죽을 거면 내 앞에서 죽어. 다른 데서 죽으면 귀찮아지니까."</div>
+        <span class="char-tag">독설가</span><span class="char-tag">비밀</span><span class="char-tag">섬세</span>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-portrait"><span class="char-initial">A</span></div>
+      <div class="char-info">
+        <div class="char-role">Interpreter & Merchant</div>
+        <div class="char-name">Ali ibn Yusuf <span style="font-size:10px">💕</span></div>
+        <div class="char-name-kr">알리 이븐 유세프 · 통역/중개상 · 30대 초반</div>
+        <div class="char-quote">"내 심장은 비매품이야. …근데 당신이라면 할부는 가능할지도?"</div>
+        <span class="char-tag">능글</span><span class="char-tag">밀당</span><span class="char-tag">다문화</span>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-portrait"><span class="char-initial">D</span></div>
+      <div class="char-info">
+        <div class="char-role">Rival Captain</div>
+        <div class="char-name">Diogo de Melo <span style="font-size:10px">💕</span></div>
+        <div class="char-name-kr">디오구 드 멜루 · 라이벌 선장 · 20대 후반</div>
+        <div class="char-quote">"또 만났군. 이번에도 내 뒤꽁무니만 쫓을 건가?"</div>
+        <span class="char-tag">츤데레</span><span class="char-tag">귀족</span><span class="char-tag">라이벌</span>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-portrait"><span class="char-initial">L</span></div>
+      <div class="char-info">
+        <div class="char-role">Informant</div>
+        <div class="char-name">Luísa da Silva <span style="font-size:10px">💕</span></div>
+        <div class="char-name-kr">루이사 다 실바 · 리스본 정보상 · 20대 초반</div>
+        <div class="char-quote">"…바람 방향이 바뀌었어. 오늘쯤 돌아올 수도 있겠다."</div>
+        <span class="char-tag">기다림</span><span class="char-tag">영리</span><span class="char-tag">항구의 사람</span>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-portrait"><span class="char-initial">S</span></div>
+      <div class="char-info">
+        <div class="char-role">Stowaway</div>
+        <div class="char-name">Sofia Margarida <span style="font-size:10px">💕</span></div>
+        <div class="char-name-kr">소피아 마르게리다 · 밀항자/견습 · 19세</div>
+        <div class="char-quote">"나도 바다가 보고 싶었어요! 리스본 골목밖에 모르는 인생은 싫단 말이에요!"</div>
+        <span class="char-tag">햇살</span><span class="char-tag">성장</span><span class="char-tag">순수</span>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-portrait"><span class="char-initial">T</span></div>
+      <div class="char-info">
+        <div class="char-role">Chaplain</div>
+        <div class="char-name">Tomás Aquina <span style="font-size:10px">💕</span></div>
+        <div class="char-name-kr">토마스 아퀴나 · 선상 사제 · 20대 중반</div>
+        <div class="char-quote">"신이 용서하시겠지만… 저는 제 자신을 용서할 수 없습니다."</div>
+        <span class="char-tag">금기</span><span class="char-tag">갈등</span><span class="char-tag">신앙</span>
+      </div>
+    </div>
+
+    <div class="char-card" style="border-color: rgba(100,140,200,0.15);">
+      <div class="char-portrait" style="border-color:rgba(100,140,200,0.2); background:linear-gradient(135deg, rgba(100,140,200,0.08), rgba(80,120,180,0.08));"><span class="char-initial" style="color:rgba(100,140,200,0.3);">M</span></div>
+      <div class="char-info">
+        <div class="char-role" style="color:#4a7a9a;">Boatswain (Non-romance)</div>
+        <div class="char-name">Marco Ferreira <span style="font-size:10px">🛡️</span></div>
+        <div class="char-name-kr">마르코 페레이라 · 갑판장 · 30대 중반 — 든든한 형 & 조력자</div>
+        <div class="char-quote">"걱정 마, 선장! 내가 뭘 때리든 부러지는 건 상대편이야."</div>
+        <span class="char-tag" style="color:#6a9aba; border-color:rgba(100,140,200,0.2);">전투</span>
+        <span class="char-tag" style="color:#6a9aba; border-color:rgba(100,140,200,0.2);">충성</span>
+        <span class="char-tag" style="color:#6a9aba; border-color:rgba(100,140,200,0.2);">연애 조언</span>
+      </div>
+    </div>
+
+  </div>
+  <div style="text-align:right; margin-top:10px; font-size:13px; color:#5a6a80; letter-spacing:0.5px;">
+    💕 공략 가능 &nbsp;&nbsp; 🛡️ 비공략 (조력자)
+  </div>
+</div>
+
+<!-- ═══ 시스템 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Systems</div>
+  <h2 class="section-title">바다 <span class="gold">위의</span> 규칙</h2>
+  <div class="section-divider"></div>
+  <div class="sys-grid">
+    <div class="sys-card">
+      <div class="sys-icon">🛒</div>
+      <div class="sys-name">교역</div>
+      <div class="sys-desc">항구마다 다른 시세로<br>물건을 사고판다.<br>싸게 사서 비싸게 팔아라.</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-icon">🎲</div>
+      <div class="sys-name">랜덤 이벤트</div>
+      <div class="sys-desc">폭풍, 해적, 괴혈병, 반란.<br>미지의 섬 발견까지.<br>항해는 예측 불가.</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-icon">🏅</div>
+      <div class="sys-name">명성 & 칭호</div>
+      <div class="sys-desc">교역 이익, 전투 승리,<br>항로 발견으로 명성 상승.<br>「후추왕」이 되어라.</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-icon">💕</div>
+      <div class="sys-name">로맨스</div>
+      <div class="sys-desc">7명의 공략 캐릭터.<br>좁은 배 위에서 쌓이는 감정.<br>비밀, 밀당, 재회.</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-icon">📖</div>
+      <div class="sys-name">항해일지</div>
+      <div class="sys-desc">날짜별 항해 기록과<br>교역 내역, 사건을 정리.<br>선장의 메모도 남길 수 있다.</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-icon">📦</div>
+      <div class="sys-name">화물칸 점검</div>
+      <div class="sys-desc">화물 상태를 확인하고<br>쥐, 밀항자, 침수 등<br>예상 못한 사건에 대응.</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-icon">✏️</div>
+      <div class="sys-name">갑판 낙서장</div>
+      <div class="sys-desc">선원들이 남긴 낙서와<br>그림, 메시지를 구경.<br>심리 상태와 복선이 숨어 있다.</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-icon">💌</div>
+      <div class="sys-name">항구 편지함</div>
+      <div class="sys-desc">항구마다 편지가 도착한다.<br>소식, 독촉장, 밀서까지.<br>답장도 쓸 수 있다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 항구 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Ports</div>
+  <h2 class="section-title">세계의 <span class="gold">항구</span></h2>
+  <div class="section-divider"></div>
+  <div class="routes">
+    <div class="route">
+      <span class="route-icon">⚓</span>
+      <div>
+        <div class="route-name">리스본 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Lisboa</span></div>
+        <div class="route-desc">포르투갈 — 본거지</div>
+      </div>
+      <div class="route-goods">와인 · 총기 · 모직물</div>
+    </div>
+    <div class="route">
+      <span class="route-icon">🏰</span>
+      <div>
+        <div class="route-name">세비야 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Sevilla</span></div>
+        <div class="route-desc">스페인 — 라이벌의 도시</div>
+      </div>
+      <div class="route-goods">올리브유 · 철광석</div>
+    </div>
+    <div class="route">
+      <span class="route-icon">🕌</span>
+      <div>
+        <div class="route-name">세우타 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Ceuta</span></div>
+        <div class="route-desc">북아프리카 — 두 세계의 교차점</div>
+      </div>
+      <div class="route-goods">양탄자 · 가죽 · 향수</div>
+    </div>
+    <div class="route">
+      <span class="route-icon">✨</span>
+      <div>
+        <div class="route-name">아크라 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Accra</span></div>
+        <div class="route-desc">서아프리카 — 황금해안</div>
+      </div>
+      <div class="route-goods">금 · 상아</div>
+    </div>
+    <div class="route">
+      <span class="route-icon">🌶️</span>
+      <div>
+        <div class="route-name">캘리컷 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Calicut</span></div>
+        <div class="route-desc">인도 — 향신료의 천국</div>
+      </div>
+      <div class="route-goods">후추 · 비단 · 보석</div>
+    </div>
+    <div class="route">
+      <span class="route-icon">🏝️</span>
+      <div>
+        <div class="route-name">말라카 <span style="font-size:11px; color:#5a6a80; font-weight:400;">Malacca</span></div>
+        <div class="route-desc">동남아 — 세계의 끝</div>
+      </div>
+      <div class="route-goods">정향 · 육두구 · 도자기</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 그리팅 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Greetings</div>
+  <h2 class="section-title">네 가지 <span class="gold">시작</span></h2>
+  <div class="section-divider"></div>
+  <div class="greeting-grid">
+    <div class="greeting-card">
+      <div class="greeting-num">I</div>
+      <div class="greeting-title">빚쟁이 선장</div>
+      <div class="greeting-desc">아버지의 유산은 낡은 배 한 척과 빚더미. 3개월 안에 800골드를 갚아야 한다.</div>
+      <div style="margin-top:8px; font-size:11px; color:#5a6a80; line-height:1.6; padding-top:6px; border-top:1px solid rgba(180,160,100,0.08);">
+        ⚓ 산타 에스페란사 <span style="color:#4a5a70;">(카라벨)</span><br>
+        💰 50 · 👥 8명 · 🍞 15일 · 📦 5/30
+      </div>
+    </div>
+    <div class="greeting-card">
+      <div class="greeting-num">II</div>
+      <div class="greeting-title">왕의 밀명</div>
+      <div class="greeting-desc">왕실의 후원을 받은 탐험가. 지도의 끝 너머를 찾아라. 영광스러운 자살 명령.</div>
+      <div style="margin-top:8px; font-size:11px; color:#5a6a80; line-height:1.6; padding-top:6px; border-top:1px solid rgba(180,160,100,0.08);">
+        ⚓ 코로아 데 포르투갈 <span style="color:#4a5a70;">(캐랙)</span><br>
+        💰 300 · 👥 20명 · 🍞 30일 · 📦 10/60
+      </div>
+    </div>
+    <div class="greeting-card">
+      <div class="greeting-num">III</div>
+      <div class="greeting-title">해적의 그림자</div>
+      <div class="greeting-desc">이름을 바꿨다. 깃발을 버렸다. 하지만 과거는 쫓아온다.</div>
+      <div style="margin-top:8px; font-size:11px; color:#5a6a80; line-height:1.6; padding-top:6px; border-top:1px solid rgba(180,160,100,0.08);">
+        ⚓ 에스트렐라 <span style="color:#4a5a70;">(카라벨)</span><br>
+        💰 80 · 👥 6명 · 🍞 12일 · 📦 12/25
+      </div>
+    </div>
+    <div class="greeting-card">
+      <div class="greeting-num">IV</div>
+      <div class="greeting-title">갑판 밑의 밀항자</div>
+      <div class="greeting-desc">화물 사이에서 발견된 밀항자. 그런데 선장이 갑자기 죽었다.</div>
+      <div style="margin-top:8px; font-size:11px; color:#5a6a80; line-height:1.6; padding-top:6px; border-top:1px solid rgba(180,160,100,0.08);">
+        ⚓ 그라사 <span style="color:#4a5a70;">(카라벨)</span><br>
+        💰 0 · 👥 8명 · 🍞 10일 · 📦 15/25
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 플레이 가이드 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Life on Board</div>
+  <h2 class="section-title">선상 <span class="gold">생활</span></h2>
+  <div class="section-divider"></div>
+  <div class="guide-desc" style="margin-bottom:20px;">
+    전투와 교역만이 전부가 아니다. 배 위에서의 일상이 이야기를 만든다.
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:14px;">
+    <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:28px; flex-shrink:0;">📖</span>
+      <div style="flex-grow:1;">
+        <div style="font-size:14px; font-weight:600; color:#ddd8c8; margin-bottom:4px;">항해일지</div>
+        <div style="font-size:12.5px; color:#6a7a9a; line-height:1.7;">
+          지금까지의 항해를 <strong style="color:#c8a850;">날짜별로 정리</strong>해서 돌아본다.<br>
+          교역 내역, 전투 기록, 인물과의 만남 — 모든 것이 기록된다.<br>
+          <span style="color:#8a9ab8;">선장 메모를 남기면 나중에 다시 읽을 수 있다.</span>
+        </div>
+        <div style="margin-top:8px; padding:10px 12px; background:rgba(10,14,26,0.4); border-left:2px solid rgba(200,170,80,0.2); border-radius:0 4px 4px 0; font-size:12px; color:#7a8aa0; line-height:1.7; font-family:'IM Fell English','Pretendard',serif; font-style:italic;">
+          Day 5 — 세우타의 바람<br>
+          양탄자 10묶음을 매입. 알리 덕분에 좋은 가격. +45골드.<br>
+          ✍️ 메모: 이네스가 약 재고 걱정. 다음 항구에서 보충할 것.
+        </div>
+      </div>
+    </div>
+
+    <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:28px; flex-shrink:0;">📦</span>
+      <div style="flex-grow:1;">
+        <div style="font-size:14px; font-weight:600; color:#ddd8c8; margin-bottom:4px;">화물칸 점검</div>
+        <div style="font-size:12.5px; color:#6a7a9a; line-height:1.7;">
+          화물의 <strong style="color:#c8a850;">상태를 확인</strong>하고 예상 못한 사건에 대응한다.<br>
+          쥐 떼, 밀항자, 침수, 밀수품 — 열어볼 때마다 서프라이즈.
+        </div>
+        <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;">
+          <span style="font-size:11px; padding:3px 8px; border-radius:10px; background:rgba(200,170,80,0.08); border:1px solid rgba(200,170,80,0.15); color:#8a9ab8;">🐀 쥐 떼</span>
+          <span style="font-size:11px; padding:3px 8px; border-radius:10px; background:rgba(200,170,80,0.08); border:1px solid rgba(200,170,80,0.15); color:#8a9ab8;">👤 밀항자</span>
+          <span style="font-size:11px; padding:3px 8px; border-radius:10px; background:rgba(200,170,80,0.08); border:1px solid rgba(200,170,80,0.15); color:#8a9ab8;">💧 침수</span>
+          <span style="font-size:11px; padding:3px 8px; border-radius:10px; background:rgba(200,170,80,0.08); border:1px solid rgba(200,170,80,0.15); color:#8a9ab8;">📦 밀수품</span>
+          <span style="font-size:11px; padding:3px 8px; border-radius:10px; background:rgba(200,170,80,0.08); border:1px solid rgba(200,170,80,0.15); color:#8a9ab8;">🍷 와인 숙성</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:28px; flex-shrink:0;">✏️</span>
+      <div style="flex-grow:1;">
+        <div style="font-size:14px; font-weight:600; color:#ddd8c8; margin-bottom:4px;">갑판 낙서장</div>
+        <div style="font-size:12.5px; color:#6a7a9a; line-height:1.7;">
+          선원들이 돛대와 갑판에 <strong style="color:#c8a850;">몰래 남긴 낙서</strong>를 구경한다.<br>
+          캐릭터의 심리가 낙서에 드러나고, 로맨스 복선이 숨어 있기도.
+        </div>
+        <div style="margin-top:8px; padding:10px 12px 4px; background:rgba(10,14,26,0.4); border-radius:6px; font-size:12px; color:#7a8aa0; line-height:1.7;">
+          <span style="color:#5a6a80;">돛대 기둥 —</span> 에스테방이 그린 별자리 지도 ⭐<br>
+          <span style="color:#5a6a80;">갑판 바닥 —</span> 마르코: "오늘의 펀치 횟수: 正正正"<br>
+          <span style="color:#5a6a80;">벽 구석 —</span> 소피아: <span style="font-style:italic;">"바다는 정말 정말 크다!!!!"</span><br>
+          <span style="color:#5a6a80;">지운 흔적 —</span> 누군가 그린 <span style="color:#c8a850;">♡</span> 위에 ❌ 표시
+        </div>
+      </div>
+    </div>
+
+    <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:28px; flex-shrink:0;">💌</span>
+      <div style="flex-grow:1;">
+        <div style="font-size:14px; font-weight:600; color:#ddd8c8; margin-bottom:4px;">항구 편지함</div>
+        <div style="font-size:12.5px; color:#6a7a9a; line-height:1.7;">
+          항구에 닿을 때마다 <strong style="color:#c8a850;">편지함을 확인</strong>할 수 있다.<br>
+          루이사의 안부, 채권자의 독촉장, 왕실 밀서, 디오구의 도전장까지.
+        </div>
+        <div style="margin-top:8px; padding:10px 12px; background:rgba(10,14,26,0.4); border-left:2px solid rgba(200,170,80,0.2); border-radius:0 4px 4px 0; font-size:12px; color:#7a8aa0; line-height:1.7; font-family:'IM Fell English','Pretendard',serif; font-style:italic;">
+          ✉️ 루이사 다 실바 — 리스본에서<br>
+          "항구에 네 배가 보이지 않는 날이 벌써 열흘째야.<br>
+          …다음엔 떠나기 전에 말이라도 하고 가."
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 플레이 가이드 (원본) ═══ -->
+<div class="section">
+  <div class="section-label">✦ How to Play</div>
+  <h2 class="section-title">항해 <span class="gold">안내서</span></h2>
+  <div class="section-divider"></div>
+
+  <div class="guide-flow">
+    <div class="guide-step">
+      <div class="guide-num">1</div>
+      <div class="guide-body">
+        <div class="guide-title">시작 선택하기</div>
+        <div class="guide-desc">
+          캐릭터 선택 후 <strong>4가지 시작 시나리오</strong> 중 하나를 고른다.<br>
+          빚쟁이, 왕의 밀명, 전직 해적, 밀항자 — 각각 시작 조건과 자금이 다르다.
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-num">2</div>
+      <div class="guide-body">
+        <div class="guide-title">상태창 읽기</div>
+        <div class="guide-desc">
+          매 턴 응답 끝에 <strong>상태창</strong>이 나온다. 현재 보유 자원을 한눈에 파악할 수 있다.
+        </div>
+        <div class="status-demo">
+          <div class="st-info-btn" onclick="this.nextElementSibling.classList.toggle('active')">ⓘ</div>
+          <div class="st-info-popup">
+            <strong>💰 골드</strong> — 교역·수리·고용에 쓰는 돈<br>
+            <strong>👥 선원</strong> — 항해 인원. 부족하면 출항 불가<br>
+            <strong>🍞 식량</strong> — 남은 일수. 0이면 괴혈병·반란<br>
+            <strong>📦 적재</strong> — 화물칸. 가득 차면 더 못 싣는다<br>
+            <strong>⭐ 명성</strong> — 높을수록 좋은 의뢰·칭호 획득<br>
+            <strong>🏅 칭호</strong> — 명성에 따라 자동 변경
+          </div>
+          <div class="st-header"><span>⚓ 산타 에스페란사 ｜ 📅 Day 3 ｜ 📍 세우타 항구</span></div>
+          <div class="st-row">
+            <span>💰 <span class="st-val">120</span> <span class="st-label">골드</span></span>
+            <span>👥 <span class="st-val">8</span><span class="st-label">명</span></span>
+            <span>🍞 <span class="st-val">12</span><span class="st-label">일치</span></span>
+          </div>
+          <div class="st-row">
+            <span>📦 <span class="st-val">18/30</span> <span class="st-label">적재</span></span>
+            <span>⭐ <span class="st-val">15</span> <span class="st-label">명성</span></span>
+            <span style="margin-left:6px">🏅 <span class="st-label">무명의 선장</span></span>
+          </div>
+        </div>
+        <div class="guide-desc">
+          <strong>💰 골드</strong> = 돈. 교역과 수리에 사용<br>
+          <strong>👥 선원</strong> = 항해에 필요한 인원. 부족하면 출항 불가<br>
+          <strong>🍞 식량</strong> = 남은 식량 일수. 0이 되면 괴혈병·반란 위험<br>
+          <strong>📦 적재</strong> = 화물칸. 가득 차면 더 못 싣는다<br>
+          <strong>⭐ 명성</strong> = 높을수록 좋은 의뢰·칭호 획득<br>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-num">3</div>
+      <div class="guide-body">
+        <div class="guide-title">교역으로 돈 벌기</div>
+        <div class="guide-desc">
+          게임의 핵심. <strong>싸게 사서 → 먼 항구에서 비싸게 판다.</strong>
+        </div>
+        <div class="trade-tip">
+          <span class="trade-tip-icon">💡</span>
+          <span class="trade-tip-text">
+            리스본에서 <strong>와인(15골드)</strong>을 사서 → 캘리컷에서 <strong>40~60골드</strong>에 판다<br>
+            캘리컷에서 <strong>후추(10골드)</strong>를 사서 → 리스본에서 <strong>80~120골드</strong>에 판다
+          </span>
+        </div>
+        <div class="trade-tip">
+          <span class="trade-tip-icon">⚠️</span>
+          <span class="trade-tip-text">
+            거리가 멀수록 이익이 크지만, <strong>식량·해적·폭풍</strong> 리스크도 커진다.<br>
+            전쟁·역병 같은 이벤트로 시세가 출렁이기도 한다.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-num">4</div>
+      <div class="guide-body">
+        <div class="guide-title">선택지 & 자유 행동</div>
+        <div class="guide-desc">
+          AI가 매 턴 <strong>2~4개 선택지</strong>를 준다. 번호를 골라도 되고, 직접 원하는 행동을 입력해도 된다.<br>
+          "알리한테 가서 농담 건다" 같은 자유 입력도 가능하다.
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-num">5</div>
+      <div class="guide-body">
+        <div class="guide-title">랜덤 이벤트 대응</div>
+        <div class="guide-desc">
+          항해 중에 <strong>예고 없이</strong> 이벤트가 발생한다. 선원의 능력이 결과에 영향을 준다.
+        </div>
+        <div style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🌊</span>
+            <span style="font-size:12.5px; color:#8a9ab8; flex-grow:1;">폭풍 — 에스테방(항해사)이 핵심</span>
+            <div class="danger-bar"><div class="danger-dots"><div class="danger-dot active"></div><div class="danger-dot active"></div><div class="danger-dot"></div></div><span class="danger-label">위험</span></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🏴‍☠️</span>
+            <span style="font-size:12.5px; color:#8a9ab8; flex-grow:1;">해적 — 마르코(갑판장)가 전투 담당</span>
+            <div class="danger-bar"><div class="danger-dots"><div class="danger-dot active"></div><div class="danger-dot active"></div><div class="danger-dot active"></div></div><span class="danger-label">높음</span></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🤒</span>
+            <span style="font-size:12.5px; color:#8a9ab8; flex-grow:1;">괴혈병 — 이네스(선의)의 의술로 경감</span>
+            <div class="danger-bar"><div class="danger-dots"><div class="danger-dot active"></div><div class="danger-dot active"></div><div class="danger-dot"></div></div><span class="danger-label">위험</span></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">😤</span>
+            <span style="font-size:12.5px; color:#8a9ab8; flex-grow:1;">반란 — 선장(당신)의 카리스마가 관건</span>
+            <div class="danger-bar"><div class="danger-dots"><div class="danger-dot red"></div><div class="danger-dot red"></div><div class="danger-dot red"></div></div><span class="danger-label">치명</span></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🏝️</span>
+            <span style="font-size:12.5px; color:#8a9ab8; flex-grow:1;">미지의 섬 — 탐험하면 명성 대폭 상승!</span>
+            <div class="danger-bar"><div class="danger-dots"><div class="danger-dot active"></div><div class="danger-dot"></div><div class="danger-dot"></div></div><span class="danger-label">보통</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="guide-num">6</div>
+      <div class="guide-body">
+        <div class="guide-title">로맨스</div>
+        <div class="guide-desc">
+          호감도 수치는 없다. 캐릭터의 <strong>태도와 대사 변화</strong>로 관계가 깊어지는 걸 느낄 수 있다.<br>
+          각 캐릭터마다 관계를 깊게 만드는 <strong>핵심 이벤트</strong>가 있다.
+        </div>
+        <div style="margin-top:10px;">
+          <div class="trade-tip">
+            <span class="trade-tip-icon">🌟</span>
+            <span class="trade-tip-text">
+              <strong>에스테방</strong> → 밤에 갑판에서 별 관측, 폭풍 후 간호<br>
+              <strong>이네스</strong> → 정체를 알게 되는 순간, 의료 위기에서 협력<br>
+              <strong>알리</strong> → 교역 대성공 후 축하, 과거 이야기 공유<br>
+              <strong>루이사</strong> → 리스본 귀항 시 재회, 정보로 목숨을 구해줄 때<br>
+              <strong>디오구</strong> → 교역 대결, 위기에서 서로 구하기<br>
+              <strong>소피아</strong> → 가르침과 성장, 한 사람의 항해사로 인정<br>
+              <strong>토마스</strong> → 고해 장면, 폭풍 중 기도, 서원과 감정의 충돌
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 버튼 가이드 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Quick Buttons</div>
+  <h2 class="section-title">바로가기 <span class="gold">버튼</span></h2>
+  <div class="section-divider"></div>
+  <div class="guide-desc" style="margin-bottom:16px;">
+    채팅창 위에 나오는 <strong>바로가기 버튼</strong>이다. 원하는 행동을 빠르게 실행할 수 있다.
+  </div>
+  <div class="qr-grid">
+    <div class="qr-item">
+      <div class="qr-btn-demo">⚓ 출항</div>
+      <div class="qr-explain">
+        항구를 떠나 다음 목적지로 출발한다.<br>
+        출항 전 적재/식량 확인 → 목적지 2~3곳 선택지 표시.<br>
+        항해 도중 랜덤 이벤트가 발생할 수 있다.
+      </div>
+    </div>
+    <div class="qr-item">
+      <div class="qr-btn-demo">🏰 항구 탐색</div>
+      <div class="qr-explain">
+        정박 중인 항구의 시설을 둘러본다.<br>
+        교역소, 조선소, 술집, 정보상 등<br>
+        무엇을 할지 선택지가 나온다.
+      </div>
+    </div>
+    <div class="qr-item">
+      <div class="qr-btn-demo">🛒 교역</div>
+      <div class="qr-explain">
+        물건을 사고판다.<br>
+        현재 항구의 물품+시세, 내 화물 판매 예상 이익을 보여준다.
+      </div>
+    </div>
+    <div class="qr-item">
+      <div class="qr-btn-demo">👥 선원과 대화</div>
+      <div class="qr-explain">
+        배에 탄 사람들과 이야기한다.<br>
+        각자의 근황, 기분을 확인하고 대화 상대를 고를 수 있다.
+      </div>
+    </div>
+    <div class="qr-item">
+      <div class="qr-btn-demo">📖 항해일지</div>
+      <div class="qr-explain">
+        지금까지의 항해 기록을 날짜별로 정리해서 본다.<br>
+        교역 내역, 주요 사건, 인물 만남이 기록된다.<br>
+        선장 메모를 직접 남길 수도 있다.
+      </div>
+    </div>
+    <div class="qr-item">
+      <div class="qr-btn-demo">📦 화물칸 점검</div>
+      <div class="qr-explain">
+        화물 상태를 상세하게 확인한다.<br>
+        쥐, 밀항자, 침수 같은 이벤트가<br>
+        점검 중에 발견될 수 있다.
+      </div>
+    </div>
+    <div class="qr-item">
+      <div class="qr-btn-demo">✏️ 갑판 낙서장</div>
+      <div class="qr-explain">
+        선원들이 배에 남긴 낙서를 구경한다.<br>
+        캐릭터마다 다른 낙서 스타일.<br>
+        나도 낙서를 남기면 다음에 덧글이 달려있다.
+      </div>
+    </div>
+    <div class="qr-item">
+      <div class="qr-btn-demo">💌 편지함</div>
+      <div class="qr-explain">
+        항구의 편지함에 온 편지를 확인한다.<br>
+        소식, 독촉장, 밀서 등 매번 다른 편지가 온다.<br>
+        답장도 쓸 수 있다.
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:10px;">
+    <div class="qr-item" style="text-align:center;">
+      <div class="qr-btn-demo">📋 상태 확인</div>
+      <div class="qr-explain">
+        선박, 재정, 화물, 식량, 선원, 명성을 상세하게 보여준다.<br>
+        "지금 내가 어떤 상태인지" 한눈에 확인하고 싶을 때 누른다.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 선박 가이드 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Ships</div>
+  <h2 class="section-title">세 가지 <span class="gold">선박</span></h2>
+  <div class="section-divider"></div>
+  <div class="guide-desc" style="margin-bottom:16px;">
+    돈을 모아 더 큰 배로 업그레이드할 수 있다. 리스본 조선소에서 구매·교환한다.
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:10px;">
+    <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:28px;">⛵</span>
+      <div style="flex-grow:1;">
+        <div style="font-size:14px; font-weight:600; color:#ddd8c8; margin-bottom:2px;">카라벨 <span style="font-size:11px; color:#5a6a80;">(Caravela)</span></div>
+        <div style="font-size:12px; color:#6a7a9a; line-height:1.6;">
+          시작 배. 작고 빠르지만 짐칸이 좁다.<br>
+          <span style="color:#8a9ab8;">📦 적재 25~30 · 👥 선원 6~12명 · 💰 기본 보유</span>
+        </div>
+      </div>
+    </div>
+    <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:28px;">🚢</span>
+      <div style="flex-grow:1;">
+        <div style="font-size:14px; font-weight:600; color:#ddd8c8; margin-bottom:2px;">나오 <span style="font-size:11px; color:#5a6a80;">(Nau)</span></div>
+        <div style="font-size:12px; color:#6a7a9a; line-height:1.6;">
+          중형 상선. 교역의 주력. 균형 잡힌 능력.<br>
+          <span style="color:#8a9ab8;">📦 적재 50~60 · 👥 선원 15~25명 · 💰 500골드</span>
+        </div>
+      </div>
+    </div>
+    <div class="qr-item" style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:28px;">🛳️</span>
+      <div style="flex-grow:1;">
+        <div style="font-size:14px; font-weight:600; color:#ddd8c8; margin-bottom:2px;">캐랙 <span style="font-size:11px; color:#5a6a80;">(Carraca)</span></div>
+        <div style="font-size:12px; color:#6a7a9a; line-height:1.6;">
+          최종 목표. 대량 교역 + 강한 전투력. 느리지만 강함.<br>
+          <span style="color:#8a9ab8;">📦 적재 80~100 · 👥 선원 25~40명 · 💰 1,200골드</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 명성 가이드 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Reputation</div>
+  <h2 class="section-title">명성과 <span class="gold">칭호</span></h2>
+  <div class="section-divider"></div>
+  <div class="guide-desc" style="margin-bottom:16px;">
+    교역 이익, 전투 승리, 항로 발견, 업적으로 <strong>명성</strong>이 오른다.<br>
+    명성이 쌓이면 <strong>칭호</strong>가 바뀌고, 왕실 의뢰나 특별 이벤트가 열린다.
+  </div>
+  <div style="display:flex; flex-direction:column; gap:6px;">
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(15,22,38,0.3); border-radius:4px;">
+      <span style="font-size:16px; width:24px; text-align:center;">🌑</span>
+      <span style="font-size:13px; color:#5a6a80; width:60px;">0~50</span>
+      <span style="font-size:13px; color:#8a9ab8;">무명의 선장</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(15,22,38,0.3); border-radius:4px;">
+      <span style="font-size:16px; width:24px; text-align:center;">🌗</span>
+      <span style="font-size:13px; color:#5a6a80; width:60px;">51~150</span>
+      <span style="font-size:13px; color:#8a9ab8;">떠오르는 항해사</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(15,22,38,0.3); border-radius:4px;">
+      <span style="font-size:16px; width:24px; text-align:center;">🌕</span>
+      <span style="font-size:13px; color:#5a6a80; width:60px;">151~300</span>
+      <span style="font-size:13px; color:#c8a850;">바다의 이름을 가진 자</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(15,22,38,0.3); border-radius:4px;">
+      <span style="font-size:16px; width:24px; text-align:center;">👑</span>
+      <span style="font-size:13px; color:#5a6a80; width:60px;">301~500</span>
+      <span style="font-size:13px; color:#c8a850; font-weight:600;">향신료의 왕</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(200,170,80,0.05); border:1px solid rgba(200,170,80,0.15); border-radius:4px;">
+      <span style="font-size:16px; width:24px; text-align:center;">✦</span>
+      <span style="font-size:13px; color:#5a6a80; width:60px;">500+</span>
+      <span style="font-size:14px; color:#c8a850; font-weight:700; letter-spacing:1px;">대항해의 전설</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 교역 루트 추천 ═══ -->
+<div class="section">
+  <div class="section-label">✦ Trade Tips</div>
+  <h2 class="section-title">추천 <span class="gold">교역 루트</span></h2>
+  <div class="section-divider"></div>
+  <div class="guide-desc" style="margin-bottom:16px;">
+    처음엔 어디로 가야 할지 막막할 수 있다. 초보자용 추천 루트.
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <div class="qr-item">
+      <div style="font-size:13px; font-weight:600; color:#ddd8c8; margin-bottom:6px;">
+        🟢 초보 루트 — 리스본 ↔ 세우타
+      </div>
+      <div class="qr-explain">
+        가깝고 안전하다. 와인·모직물을 싣고 가서 양탄자·가죽으로 바꿔오면 소소하게 이익.<br>
+        <strong>예상 수익: 턴당 20~40골드</strong>
+      </div>
+    </div>
+    <div class="qr-item">
+      <div style="font-size:13px; font-weight:600; color:#ddd8c8; margin-bottom:6px;">
+        🟡 중급 루트 — 리스본 → 아크라 → 리스본
+      </div>
+      <div class="qr-explain">
+        총기를 아크라에 팔고 금을 사온다. 해적 주의!<br>
+        <strong>예상 수익: 턴당 60~120골드</strong>
+      </div>
+    </div>
+    <div class="qr-item">
+      <div style="font-size:13px; font-weight:600; color:#c8a850; margin-bottom:6px;">
+        🔴 상급 루트 — 리스본 → 캘리컷 → 리스본
+      </div>
+      <div class="qr-explain">
+        후추를 가져오면 인생역전. 하지만 왕복 30일+, 폭풍·해적·괴혈병 총출동.<br>
+        <strong>예상 수익: 턴당 200~500골드 (생존 시)</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VN 모드 팁 ═══ -->
+<div class="section">
+  <div class="section-label">✦ VN Mode</div>
+  <h2 class="section-title">비주얼노벨 <span class="gold">모드</span></h2>
+  <div class="section-divider"></div>
+  <div class="guide-desc">
+    이 봇은 <strong>VN 모드 확장</strong>과 함께 사용할 수 있다.<br>
+    VN 모드를 켜면 텍스트가 비주얼노벨처럼 한 줄씩 나온다.<br><br>
+    <strong>켜는 법:</strong> 화면의 📖 버튼 클릭<br>
+    <strong>진행:</strong> 화면 아무 곳이나 클릭하면 다음 문장<br>
+    <strong>스킵:</strong> SKIP 버튼으로 빠르게 넘기기<br>
+    <strong>BGM:</strong> 분위기에 맞는 음악을 직접 추가 가능<br><br>
+    <span style="color:#5a6a80; font-size:12px;">* VN 모드 없이도 정상 플레이 가능하다</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     세계 지도 (ATLAS)
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">✦ Atlas</div>
+  <h2 class="section-title">1498년의 <span class="gold">항해도</span></h2>
+  <div class="section-divider"></div>
+
+  <div class="atlas-wrapper">
+    <div class="atlas-title">⚓ Carta Náutica — 알려진 세계</div>
+    <div class="map-svg-box">
+<svg viewBox="0 0 1100 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+  <defs>
+    <radialGradient id="oceanGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="rgba(30,50,80,0.3)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="portGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <rect width="1100" height="620" fill="rgba(8,15,30,0.9)" rx="8"/>
+  <circle cx="550" cy="310" r="350" fill="url(#oceanGlow)"/>
+
+  <!-- 유럽 -->
+  <path fill="rgba(60,55,45,0.6)" stroke="rgba(200,168,80,0.25)" stroke-width="1.5" d="M310,50 L340,45 L380,50 L410,55 L430,48 L460,60 L480,55 L500,65 L490,80 L500,95 L485,110 L470,105 L455,115 L440,108 L425,120 L405,115 L395,130 L380,125 L370,140 L355,135 L340,150 L330,145 L325,160 L315,175 L305,170 L295,185 L280,180 L275,195 L265,198 L260,205 L270,210 L285,205 L298,210 L310,205 L325,210 L335,200 L345,205 L360,195 L370,200 L375,190 L390,195 L400,185 L395,175 L385,170 L380,160 L390,155 L400,165 L415,158 L420,145 L430,140 L440,128 L435,118 Q460,95 480,90 Q500,80 510,75 L520,80 L515,95 L520,110 L510,120 L500,130 L505,145 L495,155 L490,170 L480,175 L475,190 L465,195 L460,210 L445,215 L435,225 L425,220 L420,230 L405,225 L395,235 L380,230 L375,242 L360,238 L350,245 L340,235 L335,248 L320,244 L310,252 L300,248 L292,258 L280,252 L272,260 L262,255 L255,240 L260,225 L250,215 L245,200 L250,185 L255,170 L260,155 L265,140 L270,125 L275,110 L280,95 L285,80 L290,65 L300,55 Z"/>
+
+  <!-- 아프리카 -->
+  <path fill="rgba(60,55,45,0.6)" stroke="rgba(200,168,80,0.25)" stroke-width="1.5" d="M255,260 L270,262 L285,258 L300,265 L315,260 L330,265 L345,255 L358,260 L372,252 L385,258 L400,252 L412,260 L425,258 L435,265 L445,260 L455,268 L460,280 L455,295 L460,310 L455,325 L460,340 L458,355 L462,370 L456,385 L460,400 L455,415 L450,430 L445,445 L440,455 L432,465 L420,472 L410,478 L398,482 L385,485 L375,490 L365,495 L358,505 L355,515 L360,525 L365,535 L358,540 L350,535 L340,538 L332,530 L328,520 L330,508 L335,495 L332,482 L325,470 L318,458 L310,448 L305,435 L300,420 L295,405 L290,392 L285,378 L280,365 L275,350 L270,340 L268,328 L265,315 L262,305 L258,295 L255,282 Z"/>
+
+  <!-- 인도 -->
+  <path fill="rgba(60,55,45,0.6)" stroke="rgba(200,168,80,0.25)" stroke-width="1.5" d="M680,160 L700,155 L720,165 L740,160 L755,175 L770,170 L778,185 L775,200 L770,215 L760,230 L745,245 L735,260 L725,275 L718,290 L712,305 L708,320 L705,335 L710,345 L720,338 L730,330 L740,325 L748,318 L755,310 L760,300 L770,295 L780,290 L788,280 L790,268 L785,258 L780,248 L785,238 L790,230 L795,218 L790,205 L785,195 L780,185 L775,175 L770,170 L755,175 L740,160 L720,165 L700,155 L680,160"/>
+
+  <!-- 동남아 -->
+  <path fill="rgba(60,55,45,0.6)" stroke="rgba(200,168,80,0.25)" stroke-width="1.5" d="M840,235 L850,228 L858,238 L862,252 L858,268 L855,282 L850,296 L845,310 L840,325 L838,340 L835,352 L830,360 L828,370 L832,380 L825,375 L820,365 L818,352 L822,340 L825,325 L828,310 L832,296 L835,280 L838,265 L840,250 Z"/>
+  <path fill="rgba(60,55,45,0.5)" stroke="rgba(200,168,80,0.2)" stroke-width="1" d="M848,345 L865,338 L880,348 L892,358 L900,370 L895,382 L882,388 L868,385 L855,375 L848,362 Z"/>
+
+  <!-- 아라비아 -->
+  <path fill="rgba(60,55,45,0.6)" stroke="rgba(200,168,80,0.25)" stroke-width="1.5" d="M520,195 L540,188 L560,195 L580,190 L600,200 L618,210 L630,225 L638,240 L640,258 L635,275 L622,282 L608,278 L595,285 L580,280 L565,275 L552,268 L542,258 L535,248 L528,238 L522,225 L518,212 Z"/>
+
+  <!-- 해양 라벨 -->
+  <text x="200" y="340" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(100,140,180,0.25)" font-size="18" transform="rotate(-15,200,340)">ATLANTIC</text>
+  <text x="200" y="370" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(100,140,180,0.25)" font-size="14" transform="rotate(-15,200,370)">OCEAN</text>
+  <text x="550" y="450" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(100,140,180,0.25)" font-size="18">INDIAN OCEAN</text>
+  <text x="335" y="215" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(100,140,180,0.15)" font-size="11">Mediterranean</text>
+  <text x="395" y="310" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(100,140,180,0.15)" font-size="12">Gulf of Guinea</text>
+
+  <!-- 안전 항로 (금색 점선) -->
+  <path fill="none" stroke="rgba(200,168,80,0.35)" stroke-width="1.5" stroke-dasharray="8 4" d="M293,205 Q310,210 325,212"/>
+  <path fill="none" stroke="rgba(200,168,80,0.35)" stroke-width="1.5" stroke-dasharray="8 4" d="M293,208 Q310,225 332,240"/>
+  <path fill="none" stroke="rgba(200,168,80,0.35)" stroke-width="1.5" stroke-dasharray="8 4" d="M280,195 Q290,140 340,105 Q370,90 395,95"/>
+  <path fill="none" stroke="rgba(200,168,80,0.35)" stroke-width="1.5" stroke-dasharray="8 4" d="M330,218 Q335,228 336,238"/>
+
+  <!-- 위험 항로 (붉은 점선) -->
+  <path fill="none" stroke="rgba(180,80,80,0.4)" stroke-width="1.5" stroke-dasharray="6 3" d="M340,248 Q330,300 340,350 Q345,390 355,420"/>
+  <path fill="none" stroke="rgba(180,80,80,0.4)" stroke-width="1.5" stroke-dasharray="6 3" d="M368,425 Q400,470 430,500 Q460,515 500,510 Q530,500 545,485"/>
+  <path fill="none" stroke="rgba(180,80,80,0.4)" stroke-width="1.5" stroke-dasharray="6 3" d="M558,475 Q600,440 650,380 Q680,340 708,325"/>
+  <path fill="none" stroke="rgba(180,80,80,0.4)" stroke-width="1.5" stroke-dasharray="6 3" d="M720,330 Q760,335 800,340 Q820,345 835,350"/>
+
+  <!-- 항해 일수 -->
+  <text x="300" y="100" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(200,168,80,0.35)" font-size="9">~15일</text>
+  <text x="300" y="210" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(200,168,80,0.35)" font-size="9">~3일</text>
+  <text x="310" y="233" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(200,168,80,0.35)" font-size="9">~5일</text>
+  <text x="320" y="340" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(180,100,100,0.5)" font-size="9">~14일 ⚠️</text>
+  <text x="440" y="510" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(180,100,100,0.5)" font-size="9">~25일 ⚠️</text>
+  <text x="625" y="395" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(180,100,100,0.5)" font-size="9">~18일 ⚠️</text>
+  <text x="770" y="340" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(180,100,100,0.5)" font-size="9">~20일 ⚠️</text>
+
+  <!-- 위험 지역 -->
+  <text x="310" y="290" font-size="14" opacity="0.4">☠️</text>
+  <text x="480" y="490" font-size="14" opacity="0.4">☠️</text>
+  <text x="860" y="320" font-size="14" opacity="0.4">☠️</text>
+  <text x="370" y="500" font-size="12" opacity="0.35">⛈️</text>
+
+  <!-- 항구 마커 -->
+  <circle cx="405" cy="98" r="6" fill="#c8a850" stroke="rgba(200,168,80,0.6)" stroke-width="2" filter="url(#portGlow)"/>
+  <text x="415" y="93" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">Antwerp</text>
+  <text x="415" y="105" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.6)" font-size="9.5">앤트워프 · 플랑드르</text>
+
+  <circle cx="278" cy="200" r="8" fill="#e8c860" stroke="#c8a850" stroke-width="3" filter="url(#portGlow)"/>
+  <text x="230" y="195" font-family="'Cinzel',serif" fill="#c8a850" font-size="12" font-weight="600">Lisboa</text>
+  <text x="233" y="207" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.6)" font-size="9.5">리스본 · 본거지 🏠</text>
+
+  <circle cx="325" cy="215" r="6" fill="#c8a850" stroke="rgba(200,168,80,0.6)" stroke-width="2" filter="url(#portGlow)"/>
+  <text x="335" y="210" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">Sevilla</text>
+  <text x="335" y="222" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.6)" font-size="9.5">세비야 · 스페인</text>
+
+  <circle cx="333" cy="242" r="6" fill="#c8a850" stroke="rgba(200,168,80,0.6)" stroke-width="2" filter="url(#portGlow)"/>
+  <text x="343" y="237" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">Ceuta</text>
+  <text x="343" y="249" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.6)" font-size="9.5">세우타 · 북아프리카</text>
+
+  <circle cx="360" cy="425" r="6" fill="#c8a850" stroke="rgba(200,168,80,0.6)" stroke-width="2" filter="url(#portGlow)"/>
+  <text x="370" y="420" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">Accra</text>
+  <text x="370" y="432" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.6)" font-size="9.5">아크라 · 황금해안</text>
+
+  <circle cx="550" cy="480" r="6" fill="#c8a850" stroke="rgba(200,168,80,0.6)" stroke-width="2" filter="url(#portGlow)"/>
+  <text x="500" y="492" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">Mozambique</text>
+  <text x="510" y="504" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.6)" font-size="9.5">모잠비크 · 동아프리카</text>
+
+  <circle cx="712" cy="322" r="6" fill="#c8a850" stroke="rgba(200,168,80,0.6)" stroke-width="2" filter="url(#portGlow)"/>
+  <text x="690" y="312" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">Calicut</text>
+  <text x="685" y="345" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.6)" font-size="9.5">캘리컷 · 인도</text>
+
+  <circle cx="838" cy="352" r="6" fill="#c8a850" stroke="rgba(200,168,80,0.6)" stroke-width="2" filter="url(#portGlow)"/>
+  <text x="848" y="347" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">Malacca</text>
+  <text x="848" y="359" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.6)" font-size="9.5">말라카 · 동남아</text>
+
+  <!-- 나침반 -->
+  <g transform="translate(980,80)">
+    <circle cx="0" cy="0" r="45" fill="none" stroke="rgba(200,168,80,0.2)" stroke-width="1"/>
+    <line x1="0" y1="-40" x2="0" y2="40" stroke="rgba(200,168,80,0.15)" stroke-width="0.5"/>
+    <line x1="-40" y1="0" x2="40" y2="0" stroke="rgba(200,168,80,0.15)" stroke-width="0.5"/>
+    <polygon points="0,-38 -5,0 5,0" fill="rgba(200,168,80,0.6)"/>
+    <polygon points="0,38 -5,0 5,0" fill="rgba(100,80,50,0.4)"/>
+    <circle cx="0" cy="0" r="3" fill="#c8a850" opacity="0.6"/>
+    <text text-anchor="middle" x="0" y="-50" font-family="'Cinzel',serif" fill="rgba(200,168,80,0.6)" font-size="14" font-weight="700">N</text>
+    <text text-anchor="middle" x="0" y="60" font-family="'Cinzel',serif" fill="rgba(200,168,80,0.6)" font-size="14" font-weight="700">S</text>
+    <text text-anchor="middle" x="-55" y="5" font-family="'Cinzel',serif" fill="rgba(200,168,80,0.6)" font-size="14" font-weight="700">W</text>
+    <text text-anchor="middle" x="55" y="5" font-family="'Cinzel',serif" fill="rgba(200,168,80,0.6)" font-size="14" font-weight="700">E</text>
+  </g>
+
+  <text x="550" y="600" text-anchor="middle" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(200,168,80,0.3)" font-size="12">Carta Náutica — compiled from the records of Portuguese explorers, Anno 1498</text>
+</svg>
+    </div><!-- map-svg-box -->
+
+    <div class="map-legend-row">
+      <div class="ml-item"><span style="width:10px;height:10px;border-radius:50%;background:#e8c860;border:2px solid #c8a850;display:inline-block;"></span> 본거지</div>
+      <div class="ml-item"><span style="width:9px;height:9px;border-radius:50%;background:#c8a850;box-shadow:0 0 5px rgba(200,168,80,0.4);display:inline-block;"></span> 교역 항구</div>
+      <div class="ml-item"><svg width="25" height="8"><line x1="0" y1="4" x2="25" y2="4" stroke="rgba(200,168,80,0.5)" stroke-width="1.5" stroke-dasharray="5 3"/></svg> 안전</div>
+      <div class="ml-item"><svg width="25" height="8"><line x1="0" y1="4" x2="25" y2="4" stroke="rgba(180,80,80,0.6)" stroke-width="1.5" stroke-dasharray="5 3"/></svg> 위험</div>
+      <div class="ml-item">☠️ 해적</div>
+      <div class="ml-item">⛈️ 폭풍</div>
+    </div>
+  </div><!-- atlas-wrapper -->
+
+  <!-- 항구 정보 카드 -->
+  <div class="port-info-grid">
+    <div class="port-info-card">
+      <div class="pi-name">🏠 리스본 Lisboa</div>
+      <div class="pi-loc">포르투갈 수도 · 본거지</div>
+      <div class="pi-desc">모든 항해의 시작과 끝. 조선소, 왕실 청사, 선원 모집소, 루이사의 정보점.</div>
+      <div class="pi-goods"><span class="buy-tag">● 구매:</span> 와인, 총기, 모직물<br><span class="sell-tag">● 판매 유리:</span> 후추, 비단, 금</div>
+    </div>
+    <div class="port-info-card">
+      <div class="pi-name">🇪🇸 세비야 Sevilla</div>
+      <div class="pi-loc">스페인 안달루시아 · 라이벌 항구</div>
+      <div class="pi-desc">디오구 드 멜루의 근거지. 투우장에서 선원 사기 회복 가능.</div>
+      <div class="pi-goods"><span class="buy-tag">● 구매:</span> 올리브유, 철광석, 셰리주<br><span class="sell-tag">● 판매 유리:</span> 모직물, 아프리카 상아</div>
+    </div>
+    <div class="port-info-card">
+      <div class="pi-name">🕌 세우타 Ceuta</div>
+      <div class="pi-loc">북아프리카 · 지브롤터 해협</div>
+      <div class="pi-desc">유럽과 아프리카의 교차점. 첫 항해 목적지로 적합.</div>
+      <div class="pi-goods"><span class="buy-tag">● 구매:</span> 양탄자, 모로코 가죽, 향수<br><span class="sell-tag">● 판매 유리:</span> 와인, 총기</div>
+      <div class="pi-warn">⚠ 지브롤터 해협 인근 해적 출몰</div>
+    </div>
+    <div class="port-info-card">
+      <div class="pi-name">🌴 아크라 Accra</div>
+      <div class="pi-loc">서아프리카 황금해안 (가나)</div>
+      <div class="pi-desc">금과 상아의 보고. 부족장 알현 시 특별 교역 가능.</div>
+      <div class="pi-goods"><span class="buy-tag">● 구매:</span> 금, 상아, 콜라넛<br><span class="sell-tag">● 판매 유리:</span> 총기, 모직물, 와인</div>
+      <div class="pi-warn">⚠ 풍토병 · 장기체류 시 선원 건강 하락</div>
+    </div>
+    <div class="port-info-card">
+      <div class="pi-name">🏝️ 모잠비크 Mozambique</div>
+      <div class="pi-loc">동아프리카 해안 · 중간 기착지</div>
+      <div class="pi-desc">인도양 진입 전 보급 거점. 반드시 거쳐야 하는 항구.</div>
+      <div class="pi-goods"><span class="buy-tag">● 구매:</span> 금, 향목<br><span class="sell-tag">● 판매 유리:</span> 식량(3~5배), 무기류</div>
+      <div class="pi-warn">⚠ 질병 · 해적 · 식량 확보 필수</div>
+    </div>
+    <div class="port-info-card">
+      <div class="pi-name">🐘 캘리컷 Calicut</div>
+      <div class="pi-loc">인도 말라바르 해안</div>
+      <div class="pi-desc">향신료의 천국. 자모린(왕) 알현 시 독점 교역권 획득 가능.</div>
+      <div class="pi-goods"><span class="buy-tag">● 구매:</span> 후추, 계피, 비단, 보석<br><span class="sell-tag">● 판매 유리:</span> 총기, 와인, 유리제품</div>
+      <div class="pi-warn">⚠ 아랍 상인 세력 · 오스만 함대 출몰</div>
+    </div>
+    <div class="port-info-card">
+      <div class="pi-name">🌏 앤트워프 Antwerp</div>
+      <div class="pi-loc">플랑드르 (벨기에) · 금융 중심지</div>
+      <div class="pi-desc">유럽 최대 무역 도시. 은행 대출 가능. 향신료 최고가.</div>
+      <div class="pi-goods"><span class="buy-tag">● 구매:</span> 플랑드르 직물, 유리공예, 시계<br><span class="sell-tag">● 판매 유리:</span> 향신료 전반 (후추 100~150G)</div>
+    </div>
+    <div class="port-info-card">
+      <div class="pi-name">🐉 말라카 Malacca</div>
+      <div class="pi-loc">동남아 말라카 해협 · 세계의 끝</div>
+      <div class="pi-desc">최고 난이도, 최고 보상. 도달 시 '미지의 항로 개척자' 칭호.</div>
+      <div class="pi-goods"><span class="buy-tag">● 구매:</span> 정향, 육두구, 도자기, 차<br><span class="sell-tag">● 판매 유리:</span> 총기, 와인, 거울</div>
+      <div class="pi-warn">⚠ 해적 빈출 · 열대 폭풍 · 왕복 60일+</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     선박 도면 (BLUEPRINTS)
+═══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">✦ Blueprints</div>
+  <h2 class="section-title">카라벨 (Caravela) <span class="gold">내부 구조</span></h2>
+  <div class="section-divider"></div>
+
+  <div class="atlas-wrapper">
+    <div class="ship-cross-sub">소형 탐험선 · 시작 배 · 적재 25~30 · 선원 6~12명 · 대포 2~4문</div>
+    <div class="map-svg-box">
+<svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+  <defs>
+    <linearGradient id="hullGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(120,90,50,0.7)"/><stop offset="100%" stop-color="rgba(60,40,20,0.8)"/></linearGradient>
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(30,60,100,0.3)"/><stop offset="100%" stop-color="rgba(15,30,60,0.5)"/></linearGradient>
+    <linearGradient id="sailGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(230,220,200,0.2)"/><stop offset="100%" stop-color="rgba(200,190,170,0.1)"/></linearGradient>
+  </defs>
+
+  <!-- 해수면 -->
+  <rect x="0" y="310" width="900" height="170" fill="url(#waterGrad)"/>
+  <path d="M0,312 Q50,305 100,312 Q150,319 200,312 Q250,305 300,312 Q350,319 400,312 Q450,305 500,312 Q550,319 600,312 Q650,305 700,312 Q750,319 800,312 Q850,305 900,312" fill="none" stroke="rgba(80,140,200,0.2)" stroke-width="1"/>
+
+  <!-- 선체 -->
+  <path d="M150,310 L140,280 L130,250 L125,220 L128,195 L135,175 L145,160 L160,148 L180,140 L200,135 L230,132 L260,130 L300,128 L400,126 L500,125 L580,127 L640,130 L680,133 L710,138 L730,145 L745,155 L755,168 L762,182 L768,200 L772,220 L775,240 L778,260 L780,280 L782,300 L783,310 L780,340 L770,365 L750,380 L720,390 L650,395 L550,398 L450,400 L350,398 L280,395 L220,390 L180,380 L160,365 L150,340 Z" fill="url(#hullGrad)" stroke="rgba(200,168,80,0.4)" stroke-width="2"/>
+
+  <!-- 흘수선 -->
+  <line x1="145" y1="310" x2="785" y2="310" stroke="rgba(80,140,200,0.3)" stroke-width="1" stroke-dasharray="8 4"/>
+
+  <!-- 갑판 -->
+  <path d="M160,195 L200,185 L300,178 L400,175 L500,174 L600,176 L660,180 L710,188 L745,200 L755,210" fill="none" stroke="rgba(200,168,80,0.5)" stroke-width="2.5"/>
+  <!-- 선미루 -->
+  <path d="M620,176 L640,160 L660,148 L680,140 L710,136 L730,135 L748,138 L758,145 L765,158 L770,175" fill="rgba(90,70,40,0.5)" stroke="rgba(200,168,80,0.4)" stroke-width="1.5"/>
+  <!-- 선수루 -->
+  <path d="M160,195 L155,180 L152,165 L155,152 L162,142 L175,135 L192,130 L210,128 L225,128 L240,129 L255,130" fill="rgba(90,70,40,0.5)" stroke="rgba(200,168,80,0.4)" stroke-width="1.5"/>
+
+  <!-- 돛대 -->
+  <line x1="250" y1="130" x2="250" y2="30" stroke="rgba(160,130,80,0.8)" stroke-width="3"/>
+  <line x1="440" y1="125" x2="440" y2="5" stroke="rgba(160,130,80,0.8)" stroke-width="4"/>
+  <line x1="650" y1="148" x2="650" y2="40" stroke="rgba(160,130,80,0.8)" stroke-width="3"/>
+
+  <!-- 돛 -->
+  <path d="M250,35 Q200,60 180,90 L250,95 Q285,60 250,35Z" fill="url(#sailGrad)" stroke="rgba(200,180,140,0.4)" stroke-width="1.5"/>
+  <path d="M440,15 Q350,50 330,100 L440,105 Q530,55 440,15Z" fill="url(#sailGrad)" stroke="rgba(200,180,140,0.4)" stroke-width="1.5"/>
+  <path d="M650,45 L600,120 L720,135 Z" fill="url(#sailGrad)" stroke="rgba(200,180,140,0.4)" stroke-width="1.5"/>
+
+  <!-- 포르투갈 십자 -->
+  <line x1="385" y1="40" x2="385" y2="90" stroke="rgba(180,60,60,0.3)" stroke-width="4"/>
+  <line x1="365" y1="65" x2="405" y2="65" stroke="rgba(180,60,60,0.3)" stroke-width="4"/>
+
+  <!-- 내부 구획 -->
+  <rect x="660" y="142" width="95" height="46" rx="3" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="676" y="168" font-size="20">🧭</text><text x="700" y="170" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="14" font-weight="600">선장실</text>
+
+  <rect x="260" y="155" width="350" height="28" rx="2" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2" opacity="0.5"/>
+  <text x="406" y="177" font-size="20">⚓</text><text x="432" y="178" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="14" font-weight="600">주갑판</text>
+
+  <rect x="175" y="200" width="155" height="65" rx="3" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="191" y="237" font-size="20">🛏️</text><text x="218" y="239" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="14" font-weight="600">선원 거주구</text>
+
+  <rect x="340" y="200" width="120" height="65" rx="3" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="371" y="237" font-size="20">🍖</text><text x="395" y="239" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="14" font-weight="600">주방</text>
+
+  <rect x="470" y="200" width="110" height="65" rx="3" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="494" y="237" font-size="20">⚕️</text><text x="516" y="239" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="14" font-weight="600">의무실</text>
+
+  <rect x="600" y="195" width="120" height="55" rx="3" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="628" y="227" font-size="20">📜</text><text x="652" y="229" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="14" font-weight="600">항해사실</text>
+
+  <rect x="230" y="275" width="300" height="55" rx="3" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="341" y="307" font-size="20">📦</text><text x="368" y="310" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="15" font-weight="700">화물칸</text>
+
+  <rect x="545" y="275" width="100" height="45" rx="3" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="568" y="302" font-size="20">💣</text><text x="593" y="305" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="14" font-weight="600">탄약고</text>
+
+  <rect x="280" y="338" width="200" height="35" rx="3" fill="rgba(200,168,80,0.08)" stroke="rgba(200,168,80,0.3)" stroke-width="1" stroke-dasharray="4 2" opacity="0.6"/>
+  <text x="344" y="362" font-size="20">💧</text><text x="370" y="364" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.9)" font-size="14" font-weight="600">담수 탱크</text>
+
+  <!-- 대포 -->
+  <circle cx="190" cy="265" r="5" fill="rgba(120,100,80,0.6)" stroke="rgba(200,168,80,0.3)"/>
+  <circle cx="190" cy="290" r="5" fill="rgba(120,100,80,0.6)" stroke="rgba(200,168,80,0.3)"/>
+  <text x="155" y="283" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(200,168,80,0.4)" font-size="11">포문 ×2</text>
+
+  <circle cx="740" cy="255" r="5" fill="rgba(120,100,80,0.6)" stroke="rgba(200,168,80,0.3)"/>
+  <circle cx="753" cy="280" r="5" fill="rgba(120,100,80,0.6)" stroke="rgba(200,168,80,0.3)"/>
+  <text x="762" y="272" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(200,168,80,0.4)" font-size="11">포문 ×2</text>
+
+  <!-- 키 -->
+  <path d="M783,320 L800,340 L790,380 L783,370" fill="rgba(80,60,35,0.6)" stroke="rgba(200,168,80,0.3)" stroke-width="1.5"/>
+  <text x="795" y="355" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(200,168,80,0.4)" font-size="12">Rudder</text>
+
+  <!-- 뱃머리 -->
+  <path d="M140,195 L120,185 L105,188 L100,195" fill="none" stroke="rgba(200,168,80,0.5)" stroke-width="2"/>
+  <text x="85" y="200" font-family="'IM Fell English',serif" font-style="italic" fill="rgba(200,168,80,0.4)" font-size="12">선수상</text>
+
+  <!-- 치수 -->
+  <line x1="100" y1="430" x2="800" y2="430" stroke="rgba(200,168,80,0.2)" stroke-width="0.8" stroke-dasharray="3 2"/>
+  <text x="440" y="445" text-anchor="middle" font-family="'Cinzel',serif" fill="rgba(200,168,80,0.4)" font-size="13">≈ 20m (전체 길이)</text>
+
+  <!-- 깃발 -->
+  <path d="M440,5 L440,0 L470,5 L440,10" fill="rgba(180,60,60,0.5)" stroke="rgba(200,168,80,0.3)" stroke-width="0.5"/>
+
+  <!-- BOW/STERN 라벨 -->
+  <text x="130" y="145" font-family="'Cinzel',serif" fill="rgba(200,168,80,0.5)" font-size="14" font-weight="600">BOW</text>
+  <text x="130" y="159" font-family="'Pretendard',sans-serif" fill="rgba(200,168,80,0.3)" font-size="11">선수</text>
+  <text x="750" y="122" font-family="'Cinzel',serif" fill="rgba(200,168,80,0.5)" font-size="14" font-weight="600">STERN</text>
+  <text x="750" y="136" font-family="'Pretendard',sans-serif" fill="rgba(200,168,80,0.3)" font-size="11">선미</text>
+</svg>
+    </div><!-- map-svg-box -->
+  </div><!-- atlas-wrapper -->
+
+  <!-- 구획 설명 -->
+  <div class="room-cards">
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">🧭</span><span class="rc-name">선장실</span></div><div class="rc-desc">선미루 최상층. 항해 지도, 항해일지, 개인 물품 보관. 선장과 단둘이 만날 수 있는 장소.</div></div>
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">⚓</span><span class="rc-name">주갑판</span></div><div class="rc-desc">선원 작업 공간. 갑판 낙서장은 돛대 아래 널빤지에 새겨진다. 전투 시 대포 조작.</div></div>
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">🛏️</span><span class="rc-name">선원 거주구</span></div><div class="rc-desc">해먹이 빽빽한 좁은 공간. 15~25명이 교대로 잠을 잔다. 사기 낮으면 불만 발생.</div></div>
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">🍖</span><span class="rc-name">주방 &amp; 식량고</span></div><div class="rc-desc">간이 화덕 하나. 비스킷, 소금 고기, 럼주가 전부. 카라벨은 적재량이 적어 식량 관리가 더 중요.</div></div>
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">⚕️</span><span class="rc-name">의무실</span></div><div class="rc-desc">업그레이드(120G)로 설치. 괴혈병 예방. 토마스 신부가 여기서 부상자를 돌본다.</div></div>
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">📜</span><span class="rc-name">항해사실</span></div><div class="rc-desc">해도와 나침반, 아스트롤라베가 있는 곳. 이사벨라가 별을 읽고 항로를 계산한다.</div></div>
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">📦</span><span class="rc-name">화물칸</span></div><div class="rc-desc">배의 배(腹). 교역품 보관. 화물칸 점검으로 적재 상태·물품 신선도·습기 피해 확인.</div></div>
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">💣</span><span class="rc-name">탄약고</span></div><div class="rc-desc">화약과 포탄 보관. 피격 시 폭발 위험. 습기에 민감해서 관리 중요.</div></div>
+    <div class="room-card"><div class="rc-head"><span class="rc-icon">💧</span><span class="rc-name">담수 탱크</span></div><div class="rc-desc">최하층. 음용수 나무통이 밸러스트(균형추) 역할도 겸한다. 30일 이후 물맛 변질.</div></div>
+  </div>
+
+  <!-- 선박 비교표 -->
+  <div class="atlas-wrapper" style="margin-top:20px;">
+    <div class="atlas-title">📐 선박 비교</div>
+    <table class="ship-compare-tbl">
+      <thead><tr><th style="text-align:left;padding-left:10px;">선박</th><th>가격</th><th>적재</th><th>선원</th><th>대포</th><th>속도</th><th>전투력</th></tr></thead>
+      <tbody>
+        <tr><td class="sn">⛵ 카라벨</td><td>기본 보유</td><td>25~30</td><td>6~12</td><td>2~4</td><td><span class="stat-bar-sm" style="width:55px;background:rgba(100,200,150,0.6)"></span></td><td><span class="stat-bar-sm" style="width:18px"></span></td></tr>
+        <tr><td class="sn">🚢 나오</td><td style="color:#c8a850">500G</td><td>50~60</td><td>15~25</td><td>6~10</td><td><span class="stat-bar-sm" style="width:35px;background:rgba(200,168,80,0.5)"></span></td><td><span class="stat-bar-sm" style="width:35px"></span></td></tr>
+        <tr><td class="sn">🏴‍☠️ 캐랙</td><td style="color:#e8c860;font-weight:600">1,200G</td><td>80~100</td><td>25~40</td><td>12~20</td><td><span class="stat-bar-sm" style="width:20px;background:rgba(180,100,100,0.5)"></span></td><td><span class="stat-bar-sm" style="width:55px;background:rgba(180,60,60,0.6)"></span></td></tr>
+      </tbody>
+    </table>
+
+    <!-- 3선박 비교 실루엣 -->
+    <div class="map-svg-box" style="margin-top:20px;">
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+  <rect x="0" y="195" width="900" height="65" fill="url(#waterGrad)"/>
+  <path d="M0,197 Q50,191 100,197 Q150,203 200,197 Q250,191 300,197 Q350,203 400,197 Q450,191 500,197 Q550,203 600,197 Q650,191 700,197 Q750,203 800,197 Q850,191 900,197" fill="none" stroke="rgba(80,140,200,0.12)" stroke-width="1"/>
+
+  <!-- 카라벨 -->
+  <g transform="translate(80,0)">
+    <path d="M40,195 L35,180 L32,165 L35,153 L42,143 L55,135 L70,130 L90,127 L110,126 L130,127 L145,131 L155,140 L160,153 L162,170 L163,195 L155,210 L140,217 L110,220 L80,217 L55,210 L45,203 Z" fill="rgba(80,60,35,0.5)" stroke="rgba(200,168,80,0.35)" stroke-width="1.5"/>
+    <line x1="85" y1="127" x2="85" y2="60" stroke="rgba(160,130,80,0.6)" stroke-width="2"/>
+    <line x1="130" y1="127" x2="130" y2="75" stroke="rgba(160,130,80,0.6)" stroke-width="2"/>
+    <path d="M85,65 Q60,85 55,110 L85,113 Q100,83 85,65Z" fill="rgba(220,210,190,0.1)" stroke="rgba(200,180,140,0.25)"/>
+    <text x="98" y="242" text-anchor="middle" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">CARAVELA</text>
+    <text x="98" y="254" text-anchor="middle" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.4)" font-size="9">카라벨 · 소형</text>
+  </g>
+
+  <!-- 나오 -->
+  <g transform="translate(330,0)">
+    <path d="M30,195 L25,173 L22,153 L25,135 L32,120 L45,110 L65,103 L90,99 L120,97 L150,98 L175,103 L192,113 L200,127 L205,145 L208,170 L210,195 L202,213 L185,223 L150,227 L110,227 L70,223 L45,213 L35,203 Z" fill="rgba(80,60,35,0.5)" stroke="rgba(200,168,80,0.4)" stroke-width="1.5"/>
+    <line x1="80" y1="99" x2="80" y2="20" stroke="rgba(160,130,80,0.7)" stroke-width="2.5"/>
+    <line x1="140" y1="97" x2="140" y2="10" stroke="rgba(160,130,80,0.7)" stroke-width="3"/>
+    <line x1="185" y1="105" x2="185" y2="30" stroke="rgba(160,130,80,0.7)" stroke-width="2"/>
+    <path d="M140,15 Q95,45 85,85 L140,88 Q180,50 140,15Z" fill="rgba(220,210,190,0.12)" stroke="rgba(200,180,140,0.3)"/>
+    <text x="118" y="242" text-anchor="middle" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">NAU</text>
+    <text x="118" y="254" text-anchor="middle" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.4)" font-size="9">나오 · 중형</text>
+  </g>
+
+  <!-- 캐랙 -->
+  <g transform="translate(620,0)">
+    <path d="M20,195 L15,165 L12,137 L15,113 L25,93 L40,77 L60,67 L85,60 L115,57 L150,55 L185,57 L210,63 L230,75 L242,90 L250,110 L255,135 L258,165 L260,195 L250,217 L230,230 L190,235 L140,237 L90,235 L50,227 L30,213 L22,203 Z" fill="rgba(80,60,35,0.5)" stroke="rgba(200,168,80,0.45)" stroke-width="2"/>
+    <line x1="70" y1="60" x2="70" y2="10" stroke="rgba(160,130,80,0.7)" stroke-width="2.5"/>
+    <line x1="135" y1="55" x2="135" y2="0" stroke="rgba(160,130,80,0.7)" stroke-width="3.5"/>
+    <line x1="195" y1="58" x2="195" y2="5" stroke="rgba(160,130,80,0.7)" stroke-width="3"/>
+    <line x1="235" y1="73" x2="235" y2="20" stroke="rgba(160,130,80,0.7)" stroke-width="2"/>
+    <path d="M135,5 Q80,30 70,70 L135,73 Q185,35 135,5Z" fill="rgba(220,210,190,0.12)" stroke="rgba(200,180,140,0.3)"/>
+    <text x="138" y="250" text-anchor="middle" font-family="'Cinzel',serif" fill="#c8a850" font-size="11" font-weight="600">CARRACA</text>
+    <text x="138" y="260" text-anchor="middle" font-family="'Pretendard',sans-serif" fill="rgba(200,180,140,0.4)" font-size="9">캐랙 · 대형</text>
+  </g>
+</svg>
+    </div><!-- map-svg-box -->
+
+    <!-- 업그레이드 -->
+    <div style="font-family:'Cinzel',serif;color:rgba(200,168,80,0.7);font-size:0.9rem;margin-top:20px;text-align:center;">⚒️ UPGRADES — 리스본 조선소</div>
+    <div class="upgrade-row">
+      <div class="upgrade-chip"><div class="uc-i">🪡</div><div class="uc-n">돛 강화</div><div class="uc-e">속도 +15%</div><div class="uc-c">💰 100G</div></div>
+      <div class="upgrade-chip"><div class="uc-i">🪵</div><div class="uc-n">선체 보강</div><div class="uc-e">내구도 +20%</div><div class="uc-c">💰 150G</div></div>
+      <div class="upgrade-chip"><div class="uc-i">💣</div><div class="uc-n">대포 추가</div><div class="uc-e">전투력 +1문</div><div class="uc-c">💰 80G/문</div></div>
+      <div class="upgrade-chip"><div class="uc-i">⚕️</div><div class="uc-n">의무실</div><div class="uc-e">괴혈병 예방</div><div class="uc-c">💰 120G</div></div>
+      <div class="upgrade-chip"><div class="uc-i">🛋️</div><div class="uc-n">선장실 확장</div><div class="uc-e">사기 유지 +10%</div><div class="uc-c">💰 100G</div></div>
+    </div>
+  </div><!-- atlas-wrapper -->
+</div>
+
+<!-- 캐릭터 팝업 모달 -->
+<div class="char-modal-overlay" onclick="this.classList.remove('active')">
+  <div class="char-modal" onclick="event.stopPropagation()">
+    <div class="char-modal-portrait"></div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.char-portrait').forEach(portrait => {
+  portrait.addEventListener('click', () => {
+    const overlay = document.querySelector('.char-modal-overlay');
+    const mp = overlay.querySelector('.char-modal-portrait');
+    const img = portrait.querySelector('img');
+    if (img) {
+      mp.innerHTML = '<img src="' + img.src + '">';
+    } else {
+      const init = portrait.querySelector('.char-initial');
+      mp.innerHTML = '<span class="char-initial">' + (init ? init.textContent : '?') + '</span>';
+      if (init && init.style.color) {
+        mp.querySelector('.char-initial').style.color = init.style.color;
+      }
+    }
+    const ps = portrait.style;
+    mp.style.borderColor = ps.borderColor || '';
+    mp.style.background = ps.background || '';
+    overlay.classList.add('active');
+  });
+});
+</script>
+
+<!-- ═══ 푸터 ═══ -->
+<div class="footer">
+  <div class="footer-compass">✦</div>
+  <div class="footer-text">
+    "The sea is everything."<br>
+    — Jules Verne
+  </div>
+  <div class="footer-credit">A ERA DOS DESCOBRIMENTOS · SillyTavern Bot</div>
+</div>
+
+</body>
+</html>
